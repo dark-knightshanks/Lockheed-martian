@@ -1,14 +1,10 @@
-# Drakkar Ascent — corrected analytical design
+# Drakkar Ascent - requirement-led shell study
 
-Reproducible theoretical thrust-barrel study: no FEA or hardware testing.
+**Current status: service-load screening; competition compliance unresolved.** The lowest screened metal-shell mass is **Aluminium 7075-T6: 1.404759 kg**, 115 mm OD x 0.93 mm nominal wall. This is not total assembly mass or a final passing design.
 
-**Primary all-metal candidate under the documented assumptions:** Magnesium AZ31B, 158 mm OD x 1.80 mm nominal wall, **2.878 kg modelled structural assembly**. This is a discrete-family result, not a flight-qualified or unrestricted global optimum. Composite shell candidates are kept separate because interface and ply-level data are missing.
+The brief does not supply numerical safety factors, tolerances, imperfection amplitude or connection details. Unsupported numerical allowances and the assumed joint model have been removed. Geometry-dependent shell knockdowns remain because the brief requires them. All seven materials, both moment cases and illustrative load multipliers are included.
 
-Printable outputs: [full PDF report](output/pdf/Drakkar_Analytical_Report.pdf) and [one-page results summary](output/pdf/Drakkar_Results_Summary.pdf). Run `generate_outputs.py` to refresh the PDFs and a local ZIP bundle; the redundant ZIP is excluded from Git.
-
-Start with the [complete solution](The_Drakkar_Ascent_Challenge_Solution.md), [design review notes](House_Veridian_Design_Review_Presentation.md), or [file guide](PROJECT_FILES_GUIDE_AND_EXPLANATION.md).
-
-Python >= 3.10:
+Read the [full report](The_Drakkar_Ascent_Challenge_Solution.md), [PDF report](output/pdf/Drakkar_Analytical_Report.pdf), [PDF summary](output/pdf/Drakkar_Results_Summary.pdf) or [file guide](PROJECT_FILES_GUIDE_AND_EXPLANATION.md). Results are in [JSON](results/design.json) and [CSV](results/trade_study.csv). Earlier assembly results remain in Git history at 472798d.
 
 ```sh
 python3 parametric_diameter_study.py
@@ -21,6 +17,4 @@ python3 generate_report.py
 .venv/bin/python generate_outputs.py
 ```
 
-The model/tests need only the standard library. Graphics and PDF dependencies are pinned in `requirements.txt`. JSON/CSV files in `results/` are the numerical source; generators update canonical files in `assets/`. All equations in the report use plain text. The original research audit is preserved in [docs/RESEARCH_AUDIT.md](docs/RESEARCH_AUDIT.md).
-
-Key assumptions: factor 1.5 on all loads, 95% wall thickness, 1.5 mm bow, conservative pressure cases and a provisional 0.35 shell/ovalisation cap. The report identifies empirical applicability limits and assumed joint behaviour explicitly. Change the `Basis` parameters in the model and rerun all generators when the course design basis changes.
+Python >= 3.10. Core calculations/tests use the standard library. Graphics/PDF dependencies are pinned. The ZIP bundle and local inspection files are excluded from Git. No FEA or physical testing is used.

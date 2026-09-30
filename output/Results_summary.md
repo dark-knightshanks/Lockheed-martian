@@ -1,29 +1,30 @@
-# Drakkar Ascent - results at a glance
+# Drakkar Ascent - requirement-led results
 
-**Recommended analytical candidate for the brief loads: 2.878 kg modelled assembly.** The expanded geometric search reduces mass by 7.59% relative to the previous 3.114 kg candidate, using the same safety assumptions.
+**Service-load shell screen: Aluminium 7075-T6, 1.404759 kg shell only.** Required safety factors, ring/connection mass and manufacturing details remain unresolved. This is not a final passing competition design.
 
-| Parameter | Brief-load candidate | Larger transfer-moment candidate |
+| Parameter | Brief moment | Separate M + V*L case |
 |---|---|---|
-| Material | Magnesium AZ31B | Magnesium AZ31B |
+| Metal | Aluminium 7075-T6 | Aluminium 7075-T6 |
 | Length | 1500 mm | 1500 mm |
-| Outer diameter | 158 mm | 212 mm |
-| Nominal wall | 1.80 mm | 2.10 mm |
-| Minimum analysed wall | 1.7100 mm | 1.9950 mm |
-| Modelled assembly | 2.877525 kg | 4.423218 kg |
-| Service bending moment | 2.198 kN m | 4.395 kN m |
+| Outside diameter | 115 mm | 133 mm |
+| Nominal wall | 0.93 mm | 1.06 mm |
+| Shell mass | 1.404759 kg | 1.851952 kg |
+| Assembly mass | Unresolved | Unresolved |
 
-## What carries the load
+## Requirements and methods retained
 
-The barrel wall carries bending as compression on one side and tension on the other. The end joints transfer those forces. Rigid circular end rings preserve the end shape; K = 1 is used only for buckling.
+Supplied loads/materials, rigid circular end boundaries and K = 1. Von Mises for metals; a declared quadratic screen for effective QI materials; Euler/beam-column mechanics; NASA SP-8007 geometric shell knockdowns. Bending remains in the shell and real joints. A knockdown factor is not an assigned safety factor.
 
-## Selected connection
+## Unsupported numerical choices removed
 
-Each end has a 16.0 mm thick, 12.0 mm wide integral flange, with 36 x 4 mm Ti-6Al-4V bolts on a 146.0 mm bolt circle. Bolt properties and dimensions are a model specification, not a commercial fastener qualification.
+No baseline 1.5 load multiplier, 5% wall loss, 1.5 mm initial bow, 0.35 shell cap or 0.35 Brazier multiplier. No unpressurised case, assumed bolt/flange dimensions, invented composite ply thickness or material-specific minimum wall. Nominal thickness is used directly. The old 2.878 kg assembly used different assumptions and cannot be compared as an assembly weight saving.
 
-## Scope and decision
+## Results and remaining limits
 
-The search covers seven supplied materials, diameters 40-300 mm, discrete wall thicknesses, integer bolt counts 8-64 and five flange widths. Composite results remain shell-only because connection and ply-level properties are missing. The selected metal is the minimum within the implemented family, not a proven optimum across all architectures.
+All seven materials use a common shell-only mass boundary and numerical thickness grid. Composite interaction and laminate data remain incomplete. The full report includes both moment cases, all-material load scenarios and separate closed-end pressure strength checks.
 
-The basis uses 1.5 times the service loads, 95% wall thickness, 1.5 mm initial bow and a provisional 0.35 shell/ovalisation reduction cap. Mass includes the shell, integral flanges, root bands and modelled fasteners; it excludes adjacent adapters, seals and coatings. Some margins are small. Long-shell, shear and joint approximations remain conditional.
+Pressure enters strength at the stated 0.3 MPa. Pressure-stabilised buckling is unresolved; the model retains a labelled no-credit capacity screen. Long-shell extrapolation, peak-shear surrogate and ideal ovalisation remain analytical limitations. Passing a numerical screen does not establish required safety-factor compliance or a global optimum.
 
-Use the larger transfer candidate if the bottom section must carry M + V*L. See the complete report for the load-path distinction, calculations, margins, sensitivity and sources. No FEA or hardware testing was performed.
+## What makes the study complete
+
+Specify the required safety factors, design and account for the end connections/rings, and establish manufacturing/laminate details. See the full report for equations, applicability limits and sources. No FEA or physical testing was performed.

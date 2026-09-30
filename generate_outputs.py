@@ -10,7 +10,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, Preformatted
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, Preformatted, KeepTogether, PageBreak
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'output'
@@ -23,6 +23,7 @@ styles.add(ParagraphStyle('CodeBlock', fontName='Courier', fontSize=7, leading=1
 for name in ['Title', 'Heading1', 'Heading2', 'Heading3']:
     styles[name].textColor = colors.HexColor('#174d65')
     styles[name].spaceBefore = 12
+    styles[name].keepWithNext = True
 styles['Title'].alignment = TA_LEFT
 styles['Title'].fontSize = 23
 styles['Title'].leading = 28
@@ -70,13 +71,15 @@ def export_pdf(source, target):
                 ('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),6),
                 ('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),6),
                 ('BOTTOMPADDING',(0,0),(-1,-1),6),('LINEBELOW',(0,0),(-1,0),.5,colors.HexColor('#8fa7b5'))]))
-            story.extend([table,Spacer(1,10)]); continue
+            story.extend([KeepTogether([table]) if len(rows)<=6 else table,Spacer(1,10)]); continue
         elif line.startswith('!['):
             path = ROOT / re.search(r'\]\(([^)]+)\)', line).group(1)
             im=Image(str(path)); scale=min(WIDTH/im.imageWidth,470/im.imageHeight)
             im.drawWidth=im.imageWidth*scale; im.drawHeight=im.imageHeight*scale
             story.extend([im,Spacer(1,10)])
         elif line.startswith('#'):
+            if line in ['## 7. Concept and mass boundary', '### Baseline metal shell checks']:
+                story.append(PageBreak())
             n=len(line)-len(line.lstrip('#'))
             style='Title' if n==1 else 'Heading'+str(min(n-1,3))
             story.append(Paragraph(inline(line[n:].strip()),styles[style]))
@@ -94,36 +97,37 @@ def export_pdf(source, target):
 
 def main():
     PDF.mkdir(parents=True,exist_ok=True)
-    data=json.loads((ROOT/'results/design.json').read_text());s=data['selected'];j=s['connection'];t=data['transfer_selected']
-    summary=f'''# Drakkar Ascent - results at a glance
+    data=json.loads((ROOT/'results/design.json').read_text());s=data['selected'];t=data['transfer_selected']
+    summary=f'''# Drakkar Ascent - requirement-led results
 
-**Recommended analytical candidate for the brief loads: {s['objective_mass']:.3f} kg modelled assembly.** The expanded geometric search reduces mass by {100*(1-s['objective_mass']/3.113879737):.2f}% relative to the previous 3.114 kg candidate, using the same safety assumptions.
+**Service-load shell screen: {s['material']}, {s['shell_mass']:.6f} kg shell only.** Required safety factors, ring/connection mass and manufacturing details remain unresolved. This is not a final passing competition design.
 
-| Parameter | Brief-load candidate | Larger transfer-moment candidate |
+| Parameter | Brief moment | Separate M + V*L case |
 |---|---|---|
-| Material | {s['material']} | {t['material']} |
+| Metal | {s['material']} | {t['material']} |
 | Length | 1500 mm | 1500 mm |
-| Outer diameter | {s['diameter_mm']:.0f} mm | {t['diameter_mm']:.0f} mm |
+| Outside diameter | {s['diameter_mm']:.0f} mm | {t['diameter_mm']:.0f} mm |
 | Nominal wall | {s['nominal_t_mm']:.2f} mm | {t['nominal_t_mm']:.2f} mm |
-| Minimum analysed wall | {s['minimum_t_mm']:.4f} mm | {t['minimum_t_mm']:.4f} mm |
-| Modelled assembly | {s['objective_mass']:.6f} kg | {t['objective_mass']:.6f} kg |
-| Service bending moment | 2.198 kN m | 4.395 kN m |
+| Shell mass | {s['shell_mass']:.6f} kg | {t['shell_mass']:.6f} kg |
+| Assembly mass | Unresolved | Unresolved |
 
-## What carries the load
+## Requirements and methods retained
 
-The barrel wall carries bending as compression on one side and tension on the other. The end joints transfer those forces. Rigid circular end rings preserve the end shape; K = 1 is used only for buckling.
+Supplied loads/materials, rigid circular end boundaries and K = 1. Von Mises for metals; a declared quadratic screen for effective QI materials; Euler/beam-column mechanics; NASA SP-8007 geometric shell knockdowns. Bending remains in the shell and real joints. A knockdown factor is not an assigned safety factor.
 
-## Selected connection
+## Unsupported numerical choices removed
 
-Each end has a {j['flange_t_mm']:.1f} mm thick, {j['flange_width_mm']:.1f} mm wide integral flange, with {j['bolts_per_end']} x {j['bolt_d_mm']:.0f} mm Ti-6Al-4V bolts on a {j['bolt_circle_mm']:.1f} mm bolt circle. Bolt properties and dimensions are a model specification, not a commercial fastener qualification.
+No baseline 1.5 load multiplier, 5% wall loss, 1.5 mm initial bow, 0.35 shell cap or 0.35 Brazier multiplier. No unpressurised case, assumed bolt/flange dimensions, invented composite ply thickness or material-specific minimum wall. Nominal thickness is used directly. The old 2.878 kg assembly used different assumptions and cannot be compared as an assembly weight saving.
 
-## Scope and decision
+## Results and remaining limits
 
-The search covers seven supplied materials, diameters 40-300 mm, discrete wall thicknesses, integer bolt counts 8-64 and five flange widths. Composite results remain shell-only because connection and ply-level properties are missing. The selected metal is the minimum within the implemented family, not a proven optimum across all architectures.
+All seven materials use a common shell-only mass boundary and numerical thickness grid. Composite interaction and laminate data remain incomplete. The full report includes both moment cases, all-material load scenarios and separate closed-end pressure strength checks.
 
-The basis uses 1.5 times the service loads, 95% wall thickness, 1.5 mm initial bow and a provisional 0.35 shell/ovalisation reduction cap. Mass includes the shell, integral flanges, root bands and modelled fasteners; it excludes adjacent adapters, seals and coatings. Some margins are small. Long-shell, shear and joint approximations remain conditional.
+Pressure enters strength at the stated 0.3 MPa. Pressure-stabilised buckling is unresolved; the model retains a labelled no-credit capacity screen. Long-shell extrapolation, peak-shear surrogate and ideal ovalisation remain analytical limitations. Passing a numerical screen does not establish required safety-factor compliance or a global optimum.
 
-Use the larger transfer candidate if the bottom section must carry M + V*L. See the complete report for the load-path distinction, calculations, margins, sensitivity and sources. No FEA or hardware testing was performed.
+## What makes the study complete
+
+Specify the required safety factors, design and account for the end connections/rings, and establish manufacturing/laminate details. See the full report for equations, applicability limits and sources. No FEA or physical testing was performed.
 '''
     (OUT/'Results_summary.md').write_text(summary)
     export_pdf(summary,PDF/'Drakkar_Results_Summary.pdf')

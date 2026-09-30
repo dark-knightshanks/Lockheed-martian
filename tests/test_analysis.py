@@ -19,7 +19,7 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(math.pi**2*55e9*s['I']/1.5**2,221300.51119495928,places=5)
 
     def test_zero_axial_load_has_no_amplification(self):
-        moment,_=model.amplified_moment(0,2000,55e9,1e-6,1.5,.0015)
+        moment,_=model.amplified_moment(0,2000,55e9,1e-6,1.5)
         self.assertEqual(moment,2000)
 
     def test_secant_known_quarter_critical_load(self):
@@ -50,7 +50,7 @@ class MechanicsTests(unittest.TestCase):
             P,M,p,V=45000,4000,450000,2198
             best,states=model.strength_envelope(mat,s,.002,P,M,p,V)
             dense=0
-            for name,pressure,relief in [('wall_only',p,0),('closed_end',p,p*math.pi*s['ri']**2/s['A']),('unpressurised',0,0)]:
+            for name,pressure,relief in [('wall_only',p,0)]:
                 for i in range(3601):
                     theta=i*math.pi/1800
                     x=-P/s['A']+relief+M*s['ro']/s['I']*math.cos(theta)
@@ -58,83 +58,75 @@ class MechanicsTests(unittest.TestCase):
                     tau=V/(math.pi*s['r']*.002)*math.sin(theta)
                     if mat.composite:
                         X=mat.Xc if x<0 else mat.Yt
-                        fi=(x/X)**2+(h/mat.Yt)**2+abs(x*h)/(X*mat.Yt)+(tau/mat.S)**2
+                        fi=(x/X)**2+(h/mat.Yt)**2+(tau/mat.S)**2
                     else:
                         fi=(x*x+h*h-x*h+3*tau*tau)/mat.yield_stress**2
                     dense=max(dense,fi)
             self.assertGreaterEqual(best['index']+1e-12,dense)
             self.assertAlmostEqual(best['index'],dense,places=5)
 
-    def test_original_selected_design_not_accepted(self):
-        x=model.shell_check(model.MATERIALS[4],.120,.0014)
-        self.assertFalse(x['passes'])
+    def test_nominal_service_basis_has_no_added_allowances(self):
+        b=model.Basis();x=model.shell_check(model.MATERIALS[0],.180,.002,b)
+        self.assertEqual(b.load_multiplier,1)
+        self.assertIsNone(b.required_safety_factor)
+        self.assertEqual(x['minimum_t_mm'],2)
+        self.assertEqual(x['applied']['P'],model.LOADS['F'])
+        self.assertEqual(x['applied']['p'],model.LOADS['p'])
+        phi=math.sqrt(x['r_over_t'])/16
+        self.assertAlmostEqual(x['gx'],1-.901*(1-math.exp(-phi)))
+        self.assertAlmostEqual(x['gb'],1-.731*(1-math.exp(-phi)))
+        self.assertAlmostEqual(x['utilisations']['ovalisation'],x['applied']['M']/x['classical_brazier'])
 
-    def test_thickness_tolerance_affects_capacity(self):
-        nominal=model.shell_check(model.MATERIALS[0],.180,.002,replace(model.Basis(),thickness_retention=1))
-        reduced=model.shell_check(model.MATERIALS[0],.180,.002)
-        self.assertLess(reduced['pcr'],nominal['pcr'])
-        self.assertGreater(reduced['utilisation'],nominal['utilisation'])
+    def test_only_prescribed_pressure_in_primary_strength_case(self):
+        x=model.shell_check(model.MATERIALS[0],.180,.002)
+        self.assertEqual([r['case'] for r in x['strength_states']],['wall_only'])
+
+    def test_closed_end_strength_is_an_explicit_scenario(self):
+        mat=model.MATERIALS[0];s=model.section(.18,.002)
+        _,wall=model.strength_envelope(mat,s,.002,30000,2200,300000,1465)
+        _,closed=model.strength_envelope(mat,s,.002,30000,2200,300000,1465,'closed_end')
+        self.assertEqual(closed[0]['case'],'closed_end')
+        self.assertNotEqual(wall[0]['index'],closed[0]['index'])
 
     def test_transfer_load_definition(self):
         self.assertAlmostEqual(model.moment_envelope(replace(model.Basis(),moment_case='transfer')),2*model.LOADS['M'])
-
-    def test_composite_connection_is_explicitly_unresolved(self):
-        x=model.shell_check(model.MATERIALS[4],.120,.003)
-        self.assertIsNone(model.end_connection(model.MATERIALS[4],x))
 
 class GeneratedResultsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data=json.loads((Path(__file__).parents[1]/'results/design.json').read_text())
 
-    def test_selected_designs_pass_every_implemented_check(self):
-        for key,bkey in [('selected','basis'),('transfer_selected','transfer_basis')]:
-            saved=self.data[key]
-            material=next(m for m in model.MATERIALS if m.name==saved['material'])
-            basis=model.Basis(**self.data[bkey])
-            actual=model.shell_check(material,saved['diameter_mm']/1000,saved['nominal_t_mm']/1000,basis)
-            self.assertTrue(actual['passes'])
-            for margin in actual['margins'].values():self.assertGreaterEqual(margin,0)
-            joint=model.end_connection(material,actual,basis)
-            for margin in joint['margins'].values():self.assertGreaterEqual(margin,0)
-            self.assertAlmostEqual(joint['total_mass'],saved['objective_mass'])
+    def test_all_candidates_recompute_and_total_mass_is_unresolved(self):
+        for group,bkey in [('winners','basis'),('transfer_winners','transfer_basis')]:
+            for saved in self.data[group]:
+                mat=next(m for m in model.MATERIALS if m.name==saved['material'])
+                basis=model.Basis(**self.data[bkey])
+                actual=model.shell_check(mat,saved['diameter_mm']/1000,saved['nominal_t_mm']/1000,basis)
+                self.assertTrue(actual['passes'])
+                self.assertAlmostEqual(actual['shell_mass'],saved['shell_mass'])
+                self.assertIsNone(saved['assembly_mass'])
+                self.assertIsNone(saved['connection'])
+                self.assertEqual(saved['competition_compliance'],'unresolved')
+                # The immediately thinner point must fail or lie outside applicability.
+                thinner=model.shell_check(mat,saved['diameter_mm']/1000,
+                    (saved['nominal_t_mm']-basis.thickness_step_mm)/1000,basis)
+                self.assertFalse(thinner['passes'])
 
-    def test_connection_holes_and_washers_fit(self):
-        for key in ['selected', 'transfer_selected']:
-            j=self.data[key]['connection']
-            d=j['bolt_d_mm']; rb=j['bolt_circle_mm']/2
-            self.assertGreaterEqual(2*rb*math.sin(math.pi/j['bolts_per_end']),3*d)
-            self.assertGreaterEqual(j['flange_width_mm'],2.2*d)
-            self.assertGreaterEqual(j['flange_width_mm']/2,1.5*d)
-            self.assertGreater(j['flange_width_mm'],j['hole_mm'])
+    def test_all_seven_materials_in_every_scenario(self):
+        names={m.name for m in model.MATERIALS}
+        self.assertEqual({r['material'] for r in self.data['winners']},names)
+        self.assertEqual({r['material'] for r in self.data['transfer_winners']},names)
+        for f in [1,1.25,1.5,2]:
+            self.assertEqual({r['material'] for r in self.data['sensitivities'] if r['load_multiplier']==f},names)
 
-    def test_discrete_bolt_group_recovers_force_and_moment(self):
-        for key in ['selected', 'transfer_selected']:
-            x=self.data[key];j=x['connection'];n=j['bolts_per_end']
-            rb=j['bolt_circle_mm']/2000
-            pressure_force=x['applied']['p']*math.pi*x['section']['ri']**2
-            # Unclipped signed forces before the assumed prying multiplier.
-            angles=[2*math.pi*k/n for k in range(n)]
-            forces=[pressure_force/n+2*x['applied']['M']*math.cos(a)/(n*rb) for a in angles]
-            self.assertAlmostEqual(sum(forces),pressure_force,places=7)
-            self.assertAlmostEqual(sum(f*rb*math.cos(a) for f,a in zip(forces,angles)),x['applied']['M'],places=7)
-            self.assertAlmostEqual(j['bolt_tension'],2*max(forces),places=7)
-
-    def test_mass_budget_closes(self):
+    def test_grid_is_numerical_not_an_invented_ply_schedule(self):
         for row in self.data['winners']:
-            if row['connection']:
-                j=row['connection']
-                mass=row['shell_mass']+j['ring_extra_mass']+j['root_band_extra_mass']+j['fastener_mass']
-                self.assertAlmostEqual(mass,row['objective_mass'])
-                self.assertGreater(mass,row['shell_mass'])
-
-    def test_all_seven_materials_reported(self):
-        self.assertEqual({x['material'] for x in self.data['winners']},{m.name for m in model.MATERIALS})
-
-    def test_manufacturing_grids(self):
-        for row in self.data['winners']:
-            mat=next(m for m in model.MATERIALS if m.name==row['material'])
-            step=1 if mat.composite else .05
+            step=self.data['basis']['thickness_step_mm']
             self.assertAlmostEqual(row['nominal_t_mm']/step,round(row['nominal_t_mm']/step))
+
+    def test_missing_safety_factor_is_not_a_passing_claim(self):
+        self.assertIsNone(self.data['required_safety_factor'])
+        self.assertIsNone(self.data['assembly_mass'])
+        self.assertIn('unresolved',self.data['status'])
 
 if __name__=='__main__':unittest.main()

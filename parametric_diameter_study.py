@@ -39,13 +39,13 @@ MATERIALS = (
 @dataclass(frozen=True)
 class Basis:
     length: float = 1.5
-    load_factor: float = 1.5
-    thickness_retention: float = .95
-    kdf_cap: float = .35
+    load_multiplier: float = 1.0  # service-load reference, NOT required safety factor
+    required_safety_factor: float | None = None  # absent from brief
     moment_case: str = 'brief'
-    initial_bow: float = .0015  # assumed L/1000, stress-free sinusoidal bow
-    diameter_min_mm: int = 40  # declared search boundary, NOT a brief requirement
+    pressure_path: str = 'wall_only'  # brief specifies wall pressure, not end thrust
+    diameter_min_mm: int = 1  # numerical search resolution, not a requirement
     diameter_max_mm: int = 300
+    thickness_step_mm: float = .01  # numerical resolution, not manufacturing tolerance
 
 
 def flight_loads():
@@ -68,18 +68,17 @@ def moment_envelope(basis):
     return LOADS['M'] + (LOADS['V']*basis.length if basis.moment_case == 'transfer' else 0)
 
 
-def amplified_moment(P, M, E, I, length, bow=0):
-    """Pinned beam, uniform first-order moment envelope plus sinusoidal bow.
+def amplified_moment(P, M, E, I, length):
+    """Pinned beam, uniform first-order moment envelope.
 
     secant is exact for equal end-couple moment magnitude. Using the uniform
     envelope bounds a same-sign first-order moment diagram within this beam model.
-    The bow contribution is exact for its assumed first sinusoidal mode.
     """
     pcr = math.pi**2*E*I/length**2
     if P >= pcr:
         return math.inf, pcr
     amplification = 1/math.cos(.5*length*math.sqrt(P/(E*I)))
-    return M*amplification + P*bow/(1-P/pcr), pcr
+    return M*amplification, pcr
 
 
 def quadratic_maximum(fn, left, right):
@@ -98,20 +97,19 @@ def quadratic_maximum(fn, left, right):
     return max(choices)
 
 
-def strength_envelope(mat, s, t, P, M, pressure, shear):
+def strength_envelope(mat, s, t, P, M, pressure, shear, pressure_path="wall_only"):
     """Co-located stresses, exact angular maximum for each pressure load path.
 
     Hoop p*ro/t intentionally upper-bounds mean/inner-radius membrane stress.
     Outer-fibre bending M*ro/I is conservative relative to midsurface stress.
-    Composite FI uses sign-dependent QI *surrogate* allowables and positive
+    Composite FI uses sign-dependent QI *surrogate* allowables and zero
     normal-stress cross term; this is not a ply-resolved failure calculation.
     """
     b = M*s['ro']/s['I']
     tau = shear/(math.pi*s['r']*t)
     outputs = []
-    for name, pp, relief in [('wall_only', pressure, 0.),
-                             ('closed_end', pressure, pressure*math.pi*s['ri']**2/s['A']),
-                             ('unpressurised', 0., 0.)]:
+    relief = pressure*math.pi*s["ri"]**2/s["A"] if pressure_path == "closed_end" else 0.
+    for name, pp, relief in [(pressure_path, pressure, relief)]:
         a = -P/s['A']+relief
         hoop = pp*s['ro']/t
         def index(c):
@@ -120,7 +118,7 @@ def strength_envelope(mat, s, t, P, M, pressure, shear):
             if not mat.composite:
                 return (axial*axial+hoop*hoop-axial*hoop+3*shear2)/mat.yield_stress**2
             X = mat.Xc if axial < 0 else mat.Yt
-            return (axial/X)**2+(hoop/mat.Yt)**2+abs(axial*hoop)/(X*mat.Yt)+shear2/mat.S**2
+            return (axial/X)**2+(hoop/mat.Yt)**2+shear2/mat.S**2
         bounds = [-1., 1.]
         if b and -1 < -a/b < 1:
             bounds.insert(1, -a/b)
@@ -132,18 +130,18 @@ def strength_envelope(mat, s, t, P, M, pressure, shear):
 
 
 def shell_check(mat, diameter, nominal_t, basis=Basis()):
-    t = nominal_t*basis.thickness_retention
+    t = nominal_t
     s = section(diameter, t)
-    P = basis.load_factor*LOADS['F']
-    V = basis.load_factor*LOADS['V']
-    pressure = basis.load_factor*LOADS['p']
-    M, pcr = amplified_moment(P, basis.load_factor*moment_envelope(basis), mat.E,
-                              s['I'], basis.length, basis.initial_bow)
+    P = basis.load_multiplier*LOADS['F']
+    V = basis.load_multiplier*LOADS['V']
+    pressure = basis.load_multiplier*LOADS['p']
+    M, pcr = amplified_moment(P, basis.load_multiplier*moment_envelope(basis), mat.E,
+                              s['I'], basis.length)
     if not math.isfinite(M):
         return dict(passes=False, reason='Euler', utilisation=math.inf)
     phi = math.sqrt(s['r']/t)/16
-    gx = min(basis.kdf_cap, 1-.901*(1-math.exp(-phi)))
-    gb = min(basis.kdf_cap, 1-.731*(1-math.exp(-phi)))
+    gx = 1-.901*(1-math.exp(-phi))
+    gb = 1-.731*(1-math.exp(-phi))
     classical = mat.E/math.sqrt(3*(1-mat.nu**2))*t/s['r']
     # Avoid claiming elastic capacities beyond available material strength.
     normal_limit = mat.Xc if mat.composite else mat.yield_stress
@@ -160,10 +158,10 @@ def shell_check(mat, diameter, nominal_t, basis=Basis()):
     bending_ratio = (M*s['ro']/s['I'])/sbcr
     shear_ratio = (V/(math.pi*s['r']*t))/taucr
     interaction = axial_ratio+bending_ratio+shear_ratio
-    # Eq 16 ideal Brazier limit, with an ADDITIONAL assumed project reduction.
+    # Eq 16 ideal Brazier diagnostic; no invented extra reduction.
     brazier = .987*mat.E*s['r']*t*t/math.sqrt(1-mat.nu**2)
-    oval_ratio = M/(basis.kdf_cap*brazier)
-    strength, states = strength_envelope(mat, s, t, P, M, pressure, V)
+    oval_ratio = M/brazier
+    strength, states = strength_envelope(mat, s, t, P, M, pressure, V, basis.pressure_path)
     utilisations = dict(strength=strength['utilisation'], Euler=P/pcr,
                         shell_interaction=interaction, ovalisation=oval_ratio)
     governing = max(utilisations, key=utilisations.get)
@@ -174,7 +172,7 @@ def shell_check(mat, diameter, nominal_t, basis=Basis()):
                 utilisation=utilisations[governing], governing=governing,
                 passes=validity and max(utilisations.values()) <= 1., validity=validity,
                 utilisations=utilisations, margins={k:1/v-1 for k,v in utilisations.items()},
-                applied=dict(P=P,V=V,p=pressure,M=M,first_order_M=basis.load_factor*moment_envelope(basis)),
+                applied=dict(P=P,V=V,p=pressure,M=M,first_order_M=basis.load_multiplier*moment_envelope(basis)),
                 section=s, pcr=pcr, gx=gx, gb=gb, sigma_axial_cr=sxcr, sigma_bending_cr=sbcr,
                 tau_cr=taucr, classical_brazier=brazier,
                 ratios=dict(compression=axial_ratio,bending=bending_ratio,shear=shear_ratio),
@@ -182,187 +180,81 @@ def shell_check(mat, diameter, nominal_t, basis=Basis()):
                 r_over_t=s['r']/t, L_over_r=basis.length/s['r'], shear_gZ=gz)
 
 
-def end_connection(mat, shell, basis=Basis()):
-    """All-metal integral inward flanges: analytical connection sizing envelope.
-
-    Equally spaced through bolts, both flanges included in bolt grip; external
-    mating flange mass excluded. No friction/preload strength credit. Fitted
-    shanks assumed. Ti-6Al-4V bolts are custom material-envelope fasteners, NOT a
-    claim about commercial bolt grade. Prying multiplier 2 is an explicit
-    assumption requiring a detailed joint check outside this classroom model.
-    """
-    if mat.composite:
-        return None  # no adhesive/interlaminar/bearing allowables in brief
-    ro = shell['diameter_mm']/2000
-    tn = shell['nominal_t_mm']/1000
-    design = shell['applied']
-    best = None
-    for bolt_d in [.004, .005, .006, .008, .010]:
-        hole = bolt_d+.0005
-        for width_ratio in [3., 3.25, 3.5, 3.75, 4.]:
-            width = width_ratio*bolt_d
-            rb = ro-width/2
-            rin = ro-width
-            if rin <= 0 or width <= 1.5*tn:
-                continue
-            for n in range(8,65):
-                pitch = 2*math.pi*rb/n
-                if 2*rb*math.sin(math.pi/n) < 3*bolt_d:
-                    continue
-                # No beneficial thrust compression credited to bolt tension.
-                # Opposite flange sector also checked for full thrust compression.
-                end_p = design['p']*math.pi*shell['section']['ri']**2
-                Q = end_p/n + 2*design['M']/(n*rb)
-                tension = 2*Q  # explicit prying envelope
-                flange_force = max(tension, design['P']/n + 2*design['M']/(n*rb))
-                shear = 2*design['V']/n  # nonuniform distribution allowance
-                core_area = math.pi*(.75*bolt_d)**2/4  # conservative specified min core
-                bolt_vm = math.sqrt((tension/core_area)**2+3*(shear/core_area)**2)
-                if bolt_vm > 880e6:
-                    continue
-                for fi in range(8,61):
-                    tf = fi*.0005
-                    te = tf*basis.thickness_retention
-                    ligament = pitch-hole
-                    lever = ro-rb
-                    bend = 6*flange_force*lever/(ligament*te*te)
-                    transverse = flange_force/(ligament*te)
-                    flange_vm = math.sqrt(bend*bend+3*transverse*transverse)
-                    bearing = shear/(hole*te)
-                    pullthrough = tension/(math.pi*(1.8*bolt_d)*te)
-                    # root concentration envelope, assuming machined filleted flange
-                    root = 1.5*flange_vm
-                    washer_area=math.pi*((1.1*bolt_d)**2-(hole/2)**2)
-                    strip_area=.5*math.pi*(.75*bolt_d)*(.7*bolt_d)
-                    utils=dict(bolt=bolt_vm/880e6, flange=root/mat.yield_stress,
-                               washer_bearing=tension/(washer_area*mat.yield_stress),
-                               thread_strip=tension/(strip_area*(880e6/math.sqrt(3))),
-                               bearing=bearing/mat.yield_stress,
-                               pullthrough=pullthrough/(mat.yield_stress/math.sqrt(3)))
-                    if max(utils.values()) > 1:
-                        continue
-                    # Base shell spans entire 1500 mm. Count only flange addition.
-                    # Ignore removed holes for conservative mass; both end rings included.
-                    ring_extra = 2*math.pi*((ro-tn)**2-rin**2)*tf*mat.density
-                    # Two 20mm tapered root bands: additional thickness avg 0.5*t.
-                    band_length=.020
-                    band_extra=2*math.pi*((ro-tn)**2-(ro-1.5*tn)**2)*band_length*mat.density
-                    # Bolt mass: shank grip + equivalent head/nut + two washers.
-                    grip=2*tf+.004
-                    shank=math.pi*bolt_d**2/4*grip
-                    head_nut=2*math.pi*(.9*bolt_d)**2*(.7*bolt_d)
-                    washers=2*math.pi*((1.1*bolt_d)**2-(hole/2)**2)*(.2*bolt_d)
-                    bolts_mass=2*n*(shank+head_nut+washers)*4430
-                    total=shell['shell_mass']+ring_extra+band_extra+bolts_mass
-                    candidate=dict(bolt_material="Titanium Ti-6Al-4V",bolts_per_end=n,bolt_d_mm=bolt_d*1000,
-                        hole_mm=hole*1000,bolt_circle_mm=2*rb*1000,
-                        flange_width_mm=width*1000,flange_t_mm=tf*1000,
-                        flange_bore_mm=2*rin*1000,root_band_mm=20.,
-                        ring_extra_mass=ring_extra,root_band_extra_mass=band_extra,
-                        fastener_mass=bolts_mass,total_mass=total,
-                        bolt_tension=tension,bolt_shear=shear,
-                        utilisations=utils,margins={k:1/v-1 for k,v in utils.items()},
-                        rigidity_indicator=(tf*width**3/12)/((tn**3/(12*(1-mat.nu**2)))*math.sqrt(ro*tn)))
-                    if best is None or total < best['total_mass']:
-                        best=candidate
-                    break
-    return best
-
-
 def minimum_shell(mat, diameter, basis):
-    # Metals: 0.05mm machining increments, >=0.8mm. Composites: 8-ply
-    # symmetric balanced QI blocks, 0.125mm assumed cured ply -> 1mm increments.
-    step = .001 if mat.composite else .00005
-    start = 1 if mat.composite else 16
-    for k in range(start, int(.008/step)+1):
-        result=shell_check(mat,diameter,k*step,basis)
+    # Same numerical grid for every material. No invented ply thickness or
+    # manufacturing minimum; manufacturing and actual laminate remain unresolved.
+    step = basis.thickness_step_mm/1000
+    for k in range(1, math.floor((diameter/21)/step)+1):
+        result = shell_check(mat, diameter, k*step, basis)
         if result['passes']:
+            result.update(connection=None, assembly_mass=None,
+                          objective_mass=result['shell_mass'], mass_scope='shell only',
+                          competition_compliance='unresolved',
+                          screening_status='equivalent-QI screen' if mat.composite else 'metal shell screen')
             return result
     return None
 
 
-def optimise_at_diameter(mat, diameter, basis):
-    first=minimum_shell(mat,diameter,basis)
-    if first is None:
-        return None
-    if mat.composite:
-        first.update(connection=None, objective_mass=first['shell_mass'],
-                     mass_scope='shell only; interface unresolved')
-        return first
-    best=None
-    start=round(first['nominal_t_mm']/.05)
-    for k in range(start,161):
-        nominal_t=k*.00005
-        mass=section(diameter,nominal_t)['A']*basis.length*mat.density
-        # Monotonically increasing shell mass is a lower bound on assembly mass.
-        if best and mass >= best['objective_mass']:
-            break
-        x=first if k==start else shell_check(mat,diameter,nominal_t,basis)
-        if not x['passes']:
-            continue
-        joint=end_connection(mat,x,basis)
-        if joint:
-            x.update(connection=joint,objective_mass=joint['total_mass'],
-                     mass_scope='barrel + integral flanges + modelled fasteners')
-            if best is None or x['objective_mass'] < best['objective_mass']:
-                best=x
-    return best
-
-
 def trade(basis):
-    rows=[]
-    winners=[]
+    rows=[]; winners=[]
     for mat in MATERIALS:
         candidates=[]
         for d in range(basis.diameter_min_mm,basis.diameter_max_mm+1):
-            result=optimise_at_diameter(mat,d/1000,basis)
+            result=minimum_shell(mat,d/1000,basis)
             if result:
-                rows.append(result)
-                candidates.append(result)
+                rows.append(result); candidates.append(result)
         if candidates:
-            winners.append(min(candidates,key=lambda x:x['objective_mass']))
+            winners.append(min(candidates,key=lambda x:x['shell_mass']))
     return winners,rows
 
 
 def main():
-    out=ROOT/'results'
-    out.mkdir(exist_ok=True)
+    out=ROOT/'results';out.mkdir(exist_ok=True)
     basis=Basis()
-    winners, rows=trade(basis)
-    metals=[x for x in winners if x['connection']]
-    selected=min(metals,key=lambda x:x['objective_mass'])
-    material=next(m for m in MATERIALS if m.name==selected['material'])
-    # Select separately for the conservative physical-transfer envelope.
-    robust_basis=replace(basis,moment_case='transfer')
-    robust_winners,robust_rows=trade(robust_basis)
-    robust=min((x for x in robust_winners if x['connection']),key=lambda x:x['objective_mass'])
+    winners,rows=trade(basis)
+    metal_names={m.name for m in MATERIALS if not m.composite}
+    selected=min((x for x in winners if x['material'] in metal_names),key=lambda x:x['shell_mass'])
+    transfer_basis=replace(basis,moment_case='transfer')
+    transfer_winners,transfer_rows=trade(transfer_basis)
+    transfer_selected=min((x for x in transfer_winners if x['material'] in metal_names),key=lambda x:x['shell_mass'])
+    # Explicit scenarios; none is silently adopted as a required safety factor.
     sensitivities=[]
-    for factor in [1.25,1.5,2.0]:
-        for cap in [.2,.35,.5]:
-            b=replace(basis,load_factor=factor,kdf_cap=cap)
-            # Reoptimise selected metal, not all materials, for transparent sensitivity.
-            candidates=[]
-            for d in range(basis.diameter_min_mm,basis.diameter_max_mm+1,2):
-                x=optimise_at_diameter(material,d/1000,b)
-                if x:
-                    candidates.append((x['objective_mass'],d,x['nominal_t_mm']))
-            mass,d,t=min(candidates)
-            fixed=shell_check(material,selected['diameter_mm']/1000,selected['nominal_t_mm']/1000,b)
-            sensitivities.append(dict(load_factor=factor,kdf_cap=cap,total_mass=mass,diameter_mm=d,nominal_t_mm=t,
-                                      original_shell_utilisation=fixed['utilisation']))
+    for multiplier in [1.,1.25,1.5,2.]:
+        ws,_=trade(replace(basis,load_multiplier=multiplier)) if multiplier!=1 else (winners,rows)
+        sensitivities.extend(dict(load_multiplier=multiplier,material=x['material'],
+                                 diameter_mm=x['diameter_mm'],nominal_t_mm=x['nominal_t_mm'],
+                                 shell_mass=x['shell_mass']) for x in ws)
+    # End pressure transfer is unspecified. A separate strength-only scenario
+    # shows its effect without inventing pressure-stabilised buckling capacity.
+    pressure_scenarios=[]
+    for x in winners:
+        mat=next(m for m in MATERIALS if m.name==x['material'])
+        alt=shell_check(mat,x['diameter_mm']/1000,x['nominal_t_mm']/1000,
+                        replace(basis,pressure_path='closed_end'))
+        pressure_scenarios.append(dict(material=mat.name,wall_only_strength=x['utilisations']['strength'],
+                                       closed_end_strength=alt['utilisations']['strength']))
     payload=dict(basis=asdict(basis),loads=LOADS,materials=[asdict(m) for m in MATERIALS],
-                 winners=winners,selected=selected,transfer_basis=asdict(robust_basis),
-                 transfer_winners=robust_winners,transfer_selected=robust,
-                 sensitivities=sensitivities)
+                 status='service-load shell screening; competition compliance unresolved',
+                 assembly_mass=None,required_safety_factor=None,
+                 removed_assumptions=['1.5 mandatory load factor','5% thickness loss','1.5 mm bow',
+                   '0.35 shell cap','0.35 Brazier multiplier','unpressurised load case',
+                   'assumed bolt/flange joint','0.125 mm ply and 8-ply thickness grid',
+                   '0.8 mm minimum metal wall','positive composite cross term'],
+                 unresolved=['required safety factors','ring/connection geometry and mass',
+                   'manufacturing process and tolerances','composite laminate and interaction data',
+                   'pressure end-load path','pressure-stabilised combined buckling validation'],
+                 winners=winners,selected=selected,transfer_basis=asdict(transfer_basis),
+                 transfer_winners=transfer_winners,transfer_selected=transfer_selected,
+                 sensitivities=sensitivities,pressure_scenarios=pressure_scenarios)
     (out/'design.json').write_text(json.dumps(payload,indent=2,allow_nan=False)+'\n')
-    for name,data in [('trade_study.csv',rows),('transfer_trade_study.csv',robust_rows)]:
-        keys=['material','diameter_mm','nominal_t_mm','minimum_t_mm','shell_mass','objective_mass','mass_scope','governing','utilisation']
+    for name,data in [('trade_study.csv',rows),('transfer_trade_study.csv',transfer_rows)]:
+        keys=['material','diameter_mm','nominal_t_mm','shell_mass','mass_scope','governing','utilisation','competition_compliance']
         with (out/name).open('w',newline='') as fp:
             writer=csv.DictWriter(fp,fieldnames=keys,lineterminator="\n");writer.writeheader()
             writer.writerows({k:r[k] for k in keys} for r in data)
-    print('Brief optimum within stated all-metal family:',selected['material'],selected['diameter_mm'],selected['nominal_t_mm'],selected['objective_mass'])
-    print('Transfer-envelope optimum:',robust['material'],robust['diameter_mm'],robust['nominal_t_mm'],robust['objective_mass'])
-    print('Wrote results/design.json and two trade CSV files')
+    print(payload['status'])
+    for x in winners:
+        print(x['material'],x['diameter_mm'],x['nominal_t_mm'],x['shell_mass'])
 
-if __name__ == '__main__':
+if __name__=='__main__':
     main()

@@ -1,289 +1,153 @@
-"""Generate numerical narrative and presentation notes from the checked result set."""
+"""Generate the current requirement-led shell study from saved numerical results."""
 import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
 
 def table(headers,rows):
-    return '\n'.join(['| '+' | '.join(headers)+' |','| '+' | '.join(['---']*len(headers))+' |']+['| '+' | '.join(map(str,row))+' |' for row in rows])
+    return '\n'.join(['| '+' | '.join(headers)+' |','| '+' | '.join(['---']*len(headers))+' |']+['| '+' | '.join(map(str,r))+' |' for r in rows])
 
 def main():
-    data=json.loads((ROOT/'results/design.json').read_text())
-    s=data['selected'];j=s['connection'];b=data['basis'];loads=data['loads']
-    transfer=data['transfer_selected'];tj=transfer['connection']
-    metal_rows=[];comp_rows=[]
-    for x in sorted(data['winners'],key=lambda x:x['objective_mass']):
-        row=[x['material'],f"{x['diameter_mm']:.0f}",f"{x['nominal_t_mm']:.2f}",f"{x['shell_mass']:.3f}"]
-        if x['connection']:metal_rows.append(row+[f"{x['objective_mass']:.3f}"])
-        else:comp_rows.append(row+['Joint mass unknown'])
-    margins=table(['Check','Utilisation at design load','Margin (capacity/demand - 1)'],
-                  [[name,f'{v:.6f}',f"{s['margins'][name]:+.6f}"] for name,v in s['utilisations'].items()]+[[f'Joint: {name}',f'{v:.6f}',f"{j['margins'][name]:+.6f}"] for name,v in j['utilisations'].items()])
-    mass_table=table(['Included item','Nominal mass (kg)'],[
-        ['Shell baseline',f"{s['shell_mass']:.6f}"],['Two integral flange additions',f"{j['ring_extra_mass']:.6f}"],
-        ['Two root taper additions',f"{j['root_band_extra_mass']:.6f}"],['Both sets of bolts, nuts and washers',f"{j['fastener_mass']:.6f}"],['TOTAL MODELLED',f"{s['objective_mass']:.6f}"]])
-    source_text='''[1] Challenge PDF in this repository: sections 3-7 (loads, materials, methods and end conditions). The user supplied the clarification that K = 1 is the buckling idealisation while real joints transmit moment.
+    d=json.loads((ROOT/'results/design.json').read_text());s=d['selected'];t=d['transfer_selected'];b=d['basis']
+    rows=[[r['material'],f"{r['diameter_mm']:.0f}",f"{r['nominal_t_mm']:.2f}",f"{r['shell_mass']:.6f}",r['screening_status']] for r in d['winners']]
+    results=table(['Material','OD (mm)','Wall (mm)','Shell mass (kg)','Status'],rows)
+    assumptions=table(['Item','Treatment','Why'],[
+      ['Length, OD limit, F/M/V/p, material properties','Retained as supplied','Brief sections 3-7'],
+      ['Rigid circular ends and K = 1','Retained','Brief and user clarification; bending still transfers through shell/joints'],
+      ['Required safety factor','Unspecified; compliance unresolved','Brief section 8 requires factors but gives no values'],
+      ['1.5 load multiplier','Removed from baseline','1.0 means service loads, not an adopted design safety factor'],
+      ['5% wall loss and 1.5 mm initial bow','Removed','No tolerances or measured imperfection supplied'],
+      ['0.35 shell reduction cap','Removed','Retain geometry-dependent knockdown correlation required by section 6'],
+      ['0.35 ovalisation multiplier','Removed','Use ideal Brazier capacity only as an analytical screen'],
+      ['Unpressurised load case','Removed','Only the stated pressure appears in the baseline'],
+      ['Bolt prying/root/shear multipliers and assumed fasteners','Removed with joint sizing','No defensible complete connection specified; mass is now shell-only for ALL materials'],
+      ['Minimum metal wall and composite ply/block thickness','Removed','Common numerical thickness grid; no claim of a manufacturable laminate'],
+      ['Positive composite cross term','Removed','Diagonal quadratic screen; actual interaction remains unresolved']])
+    report=f'''# Drakkar Ascent - requirement-led analytical study
 
-[2] [NASA SP-8007 Rev 2](https://ntrs.nasa.gov/citations/20205011530), printed pp. 23-26 and 29-32: axial/bending shell buckling, cross-section collapse and shear/combined-load guidance. The report warns that the empirical axial correlation is not experimentally verified for L/r > 5. Every candidate here exceeds that ratio. Consequently this is a classroom extrapolation with a stated reduction cap, not a validated NASA design.
+**Current result: service-load shell screening, not a complete passing competition design.** The smallest calculated metal-shell mass in the declared search is {s['material']}, {s['diameter_mm']:.0f} mm OD x {s['nominal_t_mm']:.2f} mm wall, **{s['shell_mass']:.6f} kg shell only**. Ring/connection mass and required safety factors remain unresolved. All seven supplied materials are reported.
 
-[3] [Air Force Stress Analysis Manual, beam columns](https://engineeringlibrary.org/reference/beam-columns-air-force-stress-manual): axial force and bending are separate actions; geometric amplification is included explicitly. The uniform-moment secant expression used here is derived below.
+This supersedes the earlier 2.878 kg assembly claim as the current design basis. That number belonged to a different assumed load/tolerance/connection model. The new shell mass is NOT a like-for-like assembly weight saving. The earlier implementation remains in Git history at commit 472798d.
 
-[4] [NASA composite knockdown bulletin](https://ntrs.nasa.gov/citations/20240000391): a universal composite knockdown is not justified simply by citing SP-8007. Composite results in this report are conditional equivalent-material screens.
+## 1. What is required, removed and unresolved
 
-[5] [NASA MAC/GMC laminate examples](https://nasa-multiscale.github.io/legacy/MAC-GMC-4.0-Example-Manual-12.html): quasi-isotropic in-plane properties depend on the orientation distribution. A symmetric balanced laminate is not automatically isotropic in bending.'''
-    report=f'''# The Drakkar Ascent Challenge — corrected analytical solution
+{assumptions}
 
-**Status:** reproducible theoretical design study under an explicit project design basis. This replaces the unsupported passing-design and global-winner claims in research commit dd1fce2. No FEA, black-box optimiser or hardware testing is used. All equations are plain text so they remain readable without LaTeX support.
+Some modelling choices are unavoidable: a structural family, governing equations, a composite quadratic criterion and a numerical search resolution. They are declared below rather than presented as problem data. The supplied information does not uniquely determine a complete assembly optimum. Simply setting all empirical knockdown factors to 1 would violate the instruction to use knockdown factors and would remove a relevant physical effect.
 
-**Selected all-metal candidate:** {s['material']}, {s['diameter_mm']:.0f} mm OD, {s['nominal_t_mm']:.2f} mm nominal shell, {s['objective_mass']:.3f} kg modelled assembly. It passes every IMPLEMENTED check under the following assumptions. It is the minimum of the declared discrete monocoque/flange family, not a proven minimum over all stiffened, sandwich, composite and hybrid structures.
-
-**Material/input limits remain real:** the brief does not specify safety factors, imperfections, a composite failure equation, ply properties, joint requirements or pressure-end load transfer. The choices below complete the mathematical problem; they do not turn missing data into validated material/process properties. Joint strip/prying models, long-shell empirical extrapolation and the transverse-shear surrogate require acceptance as course-level approximations. A flight-qualified or universally optimal solution cannot be established from the supplied data alone.
-
-## 1. Design basis and mass boundary
-
-| Item | Adopted basis | Provenance |
-|---|---|---|
-| Length | 1500 mm between barrel mating faces, including its own integral flanges | Brief; explicit length convention |
-| Maximum OD | 300 mm including barrel flanges | Brief |
-| End restraint | Rigid circular end rings; K = 1 only for stability | Brief + user clarification |
-| Axial compression | 30 kN; no helpful pressure relief in stability checks | Brief + conservative project choice |
-| Load factor | 1.50 applied to F, M, V and p before nonlinear amplification | Project assumption, NOT a supplied requirement |
-| Thickness used for strength/stability | 95% of nominal; mass at nominal | Project manufacturing allowance |
-| Initial bow | 1.5 mm stress-free sinusoidal bow, L/1000 | Project imperfection assumption |
-| Local reduction | min(geometry-dependent isotropic correlation, 0.35) | NASA correlation + project cap; composite use conditional |
-| Ovalisation reduction | 0.35 times ideal Brazier capacity | Additional project assumption, NOT a NASA-prescribed KDF |
-| Pressure | Wall-only, closed-end and unpressurised strength envelopes; no stabilisation credit | Resolves ambiguous load path conservatively within model |
-| Diameter search domain | 40-300 mm, 1 mm increments | Computational lower boundary; 300 mm maximum from brief |
-| Metal wall grid | 0.80-8.00 mm in 0.05 mm increments | Assumed machining design grid |
-| Composite wall grid | 1-8 mm in 1 mm increments | Assumed 0.125 mm plies in complete 8-ply QI blocks |
-| Structural family | Unstiffened uniform shell + integral inward metal end flanges | Chosen analytically tractable family |
-| Mass included | Shell, flange additions, root taper additions, both bolt/nut/washer sets | Explicit calculation |
-| Excluded mass | Adjacent vehicle adapters; unspecified seals, coating, isolation and fillet detail | Not zero: not specified or designed |
-
-Reported mass is therefore **modelled structural assembly mass**, not an all-inclusive flight hardware weight. Fastener protrusions into adjacent adapters are outside the between-mating-faces length convention. If the competition uses a complete bounding-box or includes adjacent mating adapters, its geometry and mass boundary must be adjusted. No claim is made that an unspecified rigid adapter has zero physical mass.
-
-For fabrication, use a single-piece machined/formed blank with integral ends to retain the specified parent-material properties without assuming welded-joint allowables. A 1.5 m thin shell with internal end flanges needs specialist tooling; the drawing is a concept, not a manufacturing release. Magnesium/titanium interfaces require environmental and galvanic-isolation details for a real build. No cure cycle, impact tolerance, fatigue life or thermal limit is invented.
-
-## 2. Flight loads, derived from the brief
+## 2. Loads and support interpretation
 
 ```text
-q     = 0.5 * 1.225 * 200^2           = {loads['q']:.3f} Pa
-alpha = atan(20 / 200)                = {loads['alpha']:.9f} rad
-f     = q * 2 * alpha * 0.10          = {loads['f']:.6f} N/m
-V     = f * 3                        = {loads['V']:.6f} N
-M     = f * 3^2 / 2                  = {loads['M']:.6f} N m
-F     = 30000 N, compression
-p     = 300000 Pa, internal
+q = 0.5 * rho_air * V_inf^2 = {d['loads']['q']:.3f} Pa
+alpha = atan(20/200) = {d['loads']['alpha']:.9f} rad
+f = q * CN_alpha * alpha * Du = {d['loads']['f']:.6f} N/m
+V = f * Lu = {d['loads']['V']:.6f} N
+M = f * Lu^2 / 2 = {d['loads']['M']:.6f} N m
+F = 30000 N compression
+p = 300000 Pa
+L = 1.5 m; maximum OD = 0.300 m; K = 1
 ```
 
-The primary comparison follows the brief's instruction to use M = 2.198 kN m. A separate transfer envelope uses M + V*L = {2*loads['M']/1000:.6f} kN m, applicable if the upper-interface moment and shear traverse the barrel without an intermediate lateral reaction. The two are clearly separated; changing the physical moment diagram is not hidden inside the original load case.
+These are the stated service loads, without an added 1.5 factor. Bending remains in the wall and transfers through real joints as circumferentially varying axial force. Rigid end rings prescribe end circularity; they do not make interior ovalisation or bending disappear.
 
-## 3. Load transfer and exact geometry
+The primary case follows the prescribed M. A separately labelled scenario uses M + V*L when shear traverses the barrel without an intermediate lateral reaction. It is not imposed on the primary assignment case.
 
-Rigid joints transfer the moment through circumferential axial forces. Supports maintaining circularity do not erase the moment. They also do not eliminate interior ovalisation.
+## 3. Retained mechanics and explicit approximations
+
+The selected family is a uniform, unstiffened circular shell. Nominal thickness equals analysed thickness; there is no prescribed tolerance or initial bow. This is an ideal nominal geometry, not a claim that manufactured barrels are perfect.
 
 ```text
-ro = Do / 2
-ri = ro - t_min
-r  = (ro + ri) / 2
-A  = pi * (ro^2 - ri^2)
-I  = pi/4 * (ro^4 - ri^4)
-
-Nx(theta) = -F/(2*pi*r) + M*cos(theta)/(pi*r^2) + Nx_pressure
-Nx_pressure = 0                 for wall-only pressure load transfer
-Nx_pressure = p*r/2             for thin-wall closed-end transfer
+ro = Do/2; ri = ro-t; r = (ro+ri)/2
+A = pi*(ro^2-ri^2)
+I = pi/4*(ro^4-ri^4)
+mass_shell = density * A * L
+Pcr = pi^2*E*I/L^2
+M_design = M / cos[0.5*L*sqrt(F/(E*I))]
 ```
 
-Nx has units N/m of circumference. Its bending component integrates to zero axial resultant and to the applied moment. `F + 2*M/r` is NOT used as the Euler axial load. Exact A and I are used for global beam stresses and stability; mean radius is used consistently in shell equations.
-
-## 4. Beam-column effects and stress evaluation
-
-All following P, M0, Vd and pd are already factored by 1.5. L remains 1.5 m even though thick end zones would increase stiffness; no fixity or end-thickening credit is taken.
+The secant expression retains load-induced beam-column bending; it adds no arbitrary initial imperfection. It is exact for the equal-end-couple uniform first-order moment idealisation, used here as an envelope. Euler uses the actual axial force, not an invented equivalent compression from bending.
 
 ```text
-Pcr = pi^2 * E * I / L^2             (K = 1)
-Ue  = P / Pcr                        must be < 1
-u   = L * sqrt(P / (E*I))
-M_design = M0 / cos(u/2) + P*e0/(1 - P/Pcr)
+sx(theta) = -F/A + M_design*ro*cos(theta)/I
+sy = p*ro/t
+tau(theta) = V*sin(theta)/(pi*r*t)
+metal utilisation = sqrt(sx^2 + sy^2 - sx*sy + 3*tau^2) / yield
 ```
 
-For constant first-order bending M0, solving the pinned beam-column equation gives the secant amplification `1/cos(u/2)` at midspan. The second term is the response to the assumed sinusoidal initial bow. Taking the maximum first-order moment uniformly along the span is an envelope within this beam model. Stability uses the full compressive thrust even for the closed-end pressure case.
+The hoop expression uses outer radius as a thin-wall upper approximation. Strength is evaluated at the same angle for all stress components; angular maxima are solved analytically and tested against an independent scan.
+
+For QI materials, the explicit diagonal quadratic screen is:
 
 ```text
-sx(theta) = -P/A + M_design*ro*cos(theta)/I + sx_pressure
-sy        = pd*ro/t_min
-shear(theta) = Vd*sin(theta)/(pi*r*t_min)
-sx_pressure = 0 or pd*pi*ri^2/A
-
-Metal von Mises = sqrt(sx^2 + sy^2 - sx*sy + 3*shear^2)
-Metal utilisation = von_Mises / supplied_yield_strength
+X = Xc for sx < 0; X = Yt for sx >= 0
+FI = (sx/X)^2 + (sy/Yt)^2 + (tau/S)^2
+utilisation = sqrt(FI)
 ```
 
-The outer-radius hoop expression upper-bounds the mean/inner-radius membrane expression. Bending uses outer-fibre stress. Stresses are evaluated at the same angle. Since squared failure measures are quadratic in cos(theta), the code checks interval endpoints and stationary points analytically, including sign-change boundaries. A dense angular scan independently tests this maximisation.
+Directional tensile equivalence is inferred from QI properties. The cross coefficient is set to zero solely to define this preliminary quadratic model; the supplied uniaxial allowables do not identify an interaction coefficient or actual ply-level failure. These rows therefore remain equivalent-material screens, not validated first-ply designs. No ply thickness, stacking schedule or manufactured laminate is invented.
 
-For composites only, the adopted *homogenised screening* equation is:
+## 4. Stability and pressure treatment
 
 ```text
-X = supplied Xc when sx < 0; supplied Yt when sx >= 0
-FI = (sx/X)^2 + (sy/Yt)^2 + abs(sx*sy)/(X*Yt) + (shear/S)^2
-Composite screening utilisation = sqrt(FI)
+phi = sqrt(r/t)/16
+gx = 1 - 0.901*(1-exp(-phi))
+gb = 1 - 0.731*(1-exp(-phi))
+classical_stress = E/sqrt(3*(1-nu^2)) * t/r
+sx_cr = min(gx*classical_stress, material_normal_limit)
+sb_cr = min(gb*classical_stress, material_normal_limit)
+tau_cr = 0.747*0.67*E*(t/r)^1.25 / sqrt(L/r)
+Ulocal = (F/A)/sx_cr + (M_design*ro/I)/sb_cr
+       + [V/(pi*r*t)]/tau_cr
+M_Brazier_ideal = 0.987*E*r*t^2/sqrt(1-nu^2)
+Uoval = M_design/M_Brazier_ideal
 ```
 
-Using Yt as longitudinal tensile strength assumes QI directional equivalence; the positive cross term is a project interaction envelope. Neither establishes ply-resolved first-ply failure. The drawing no longer assigns the supplied QI E and allowables to a nine-ply non-QI schedule.
+The shear capacity is capped by the supplied shear strength (yield/sqrt(3) for metals). The dimensional range of the moderately-long torsional-shell formula is checked, as is 10 <= r/t < 1500. Its use with peak transverse shear is a surrogate, not a validated transverse-shear solution. The linear combined-load interaction is an explicit approximation. Applying isotropic shell formulas to effective QI properties is also conditional.
 
-## 5. Local buckling, shear and ovalisation
+NASA SP-8007 supplies the geometric knockdown correlations and ideal Brazier expression. Its axial empirical correlation is not experimentally verified for L/r > 5; the selected candidates require extrapolation. Removing an extra arbitrary reduction does not repair this limitation. [NASA SP-8007 Rev 2](https://ntrs.nasa.gov/citations/20205011530).
 
-The local model uses independent axial and bending capacities with a linear interaction, and caps any elastic stress capacity at the available material strength.
+**Pressure has not been removed:** p = 0.3 MPa enters every primary strength calculation. The brief specifies pressure on the wall, without establishing closed-end axial thrust. A separate closed-end strength scenario adds p*pi*ri^2/A; it is not silently credited in Euler or local buckling.
 
-```text
-phi = sqrt(r/t_min) / 16
-gx = min(0.35, 1 - 0.901*(1 - exp(-phi)))
-gb = min(0.35, 1 - 0.731*(1 - exp(-phi)))
-classical_stress = E/sqrt(3*(1-nu^2)) * t_min/r
-sx_cr = min(gx*classical_stress, normal_material_limit)
-sb_cr = min(gb*classical_stress, normal_material_limit)
+Pressure-stabilised buckling is not solved by this model. NASA sections 4.1.1.5.4-6 give pressure-dependent methods, including end-load and empirical pressure corrections, with applicability restrictions. Arbitrarily crediting an unspecified benefit would replace one unsupported assumption with another. The unpressurised-capacity comparison is retained and labelled as a no-credit screening approximation, not a problem requirement or pressure-aware optimum. Ideal Brazier is likewise a no-pressure-stiffening diagnostic.
 
-shear_cr = 0.747 * 0.67 * E * (t_min/r)^1.25 / sqrt(L/r)
-shear_cr is also capped by material shear strength.
+## 5. Search and results
 
-Ulocal = (P/A)/sx_cr
-       + (M_design*ro/I)/sb_cr
-       + [Vd/(pi*r*t_min)]/shear_cr
+Diameter: {b['diameter_min_mm']}-{b['diameter_max_mm']} mm in 1 mm steps. Wall: {b['thickness_step_mm']:.2f} mm numerical steps, restricted by the thin-shell domain rather than an invented material-specific minimum. The same resolution applies to metals and QI materials. Search resolution is not a manufacturing prescription. There is no additional 8 mm upper-wall cap: the domain ends at r/t = 10.
 
-M_Brazier_ideal = 0.987 * E*r*t_min^2 / sqrt(1-nu^2)
-Uoval = M_design / (0.35 * M_Brazier_ideal)
-```
+At each diameter, the first thickness meeting the numerical screen is retained. Shell mass increases monotonically with thickness in this domain, so that is the minimum grid mass at that diameter. The minimum over diameters is then reported. A numerical screen requires all implemented utilisations <= 1; it does NOT certify required safety-factor compliance or resolved model applicability.
 
-Pass each implemented limit at utilisation <= 1, before rounding. End circularity does not justify deleting the ovalisation check. Internal pressure stabilisation is deliberately not credited.
+{results}
 
-**Applicability limits:** the moderately-long-cylinder shear formula's dimensionless range is checked in code, and thin shells are restricted to 10 <= r/t < 1500. Replacing nonuniform transverse shear by its peak as uniform torsional shear is a screening surrogate; it is not a demonstrated rigorous lower bound for every transverse-shear buckling mode. Likewise the combined local/global/ovalisation modelling is an analytical approximation, not a coupled nonlinear shell solution. The long-shell extrapolation and composite stiffness assumptions remain stated limitations, even when numerical utilisations pass. The report does not describe 0.35 as a universally validated NASA factor.
+![Diameter trade](assets/trade_study_diameter_vs_mass.png)
 
-## 6. End connection and mass model
+### Baseline metal shell checks
 
-The all-metal design uses integral inward annular flanges and equally spaced axial through bolts. Mating faces are treated as rigid, as required by the brief. Bolt material is the supplied Ti-6Al-4V (880 MPa yield, 4430 kg/m^3); no commercial bolt grade or thread standard is assumed from that designation alone.
+{table(['Check','Service-load utilisation','Capacity/demand - 1'],[[k,f'{v:.6f}',f"{s['margins'][k]:+.6f}"] for k,v in s['utilisations'].items()])}
 
-```text
-Candidate bolt diameters d = 4, 5, 6, 8, 10 mm
-Candidate bolts/end n = every integer count from 8 through 64
-Radial flange width w = 3*d through 4*d in 0.25*d increments
-Bolt circle radius rb = ro - w/2
-Hole diameter dh = d + 0.5 mm
-Circumferential strip pitch = 2*pi*rb/n
-Actual adjacent-hole chord = 2*rb*sin(pi/n) >= 3*d
-Radial bolt-centre edge distance = w/2 >= 1.5*d
-Flange thickness = 4-30 mm in 0.5 mm increments
-Minimum flange thickness for checks = 0.95 * nominal
+These ratios are not proportional-load safety factors: second-order bending changes nonlinearly with load. No final passing status is assigned while the required factors remain unspecified.
 
-Pressure end force Pe = pd*pi*ri^2
-Bolt tension envelope T = 2 * [Pe/n + 2*M_design/(n*rb)]
-Bolt shear envelope Q = 2*Vd/n
-Bolt minimum core area = pi*(0.75*d)^2/4
-Bolt utilisation = sqrt((T/core_area)^2 + 3*(Q/core_area)^2)/880 MPa
-```
+![Checks](assets/failure_modes_vs_diameter.png)
 
-Thrust compression is not credited as helpful bolt clamping; full pressure-end tension is included. Factor 2 on tension is an assumed prying envelope, not a solved contact/preload model. Compression-side flange demand is also checked using P/n + 2*M/(n*rb). A radial cantilever-strip calculation uses net ligament `pitch-dh`, lever arm `ro-rb`, bending stress `6*force*lever/(ligament*t_flange_min^2)` and transverse shear `force/(ligament*t_flange_min)`. A further assumed root factor 1.5 multiplies the resulting equivalent stress.
+### Separate transfer-moment scenario
 
-The 1.5*d minimum radial centre-to-edge distance is a project geometry assumption. A 2.2*d-OD washer fits on every searched flange; the minimum remaining radial material beyond the hole is (w-dh)/2. Chord spacing, rather than arc length, governs adjacent-hole separation. Narrower rings reduce the stiffness indicator, so numerical strength and mass improvements do not independently validate the rigid-ring idealisation.
+The lowest screened metal shell for M + V*L is {t['material']}, {t['diameter_mm']:.0f} mm OD x {t['nominal_t_mm']:.2f} mm wall, {t['shell_mass']:.6f} kg shell only. Every material's corresponding result is saved in JSON and the separate CSV.
 
-Additional checks cover hole bearing from transverse shear, washer contact bearing, flange punching shear and approximate thread stripping. Nut engagement is specified as at least 0.7*d; the simplified stripping area is half the cylindrical area at minimum core diameter. These checks do not establish preload retention, fatigue, detailed thread contact, flange contact behaviour or elastic ring ovality. The relative ring/shell stiffness indicator is reported only as an indicator, not a proof that a finite ring is perfectly rigid.
+## 6. Sensitivities without hidden defaults
 
-Nominal mass integrates exact annular shell/flange volumes, ignoring hole removal conservatively. Each flange has an additional 20 mm root band tapering from 2t to t; its mass uses a slightly conservative mean-thickness approximation. Bolt mass uses a full-diameter shank through two matching flanges plus 4 mm grip allowance, two equivalent 1.8d-diameter x 0.7d head/nut volumes, and two 2.2d-OD x 0.2d washers. Both end bolt sets are included. Mating adapter mass is excluded. No unspecified joint is silently assigned zero mass.
+Multipliers 1.00, 1.25, 1.50 and 2.00 are illustrative proportional-load scenarios, not required factors of safety. Every material is re-screened for each scenario. All loads including pressure scale in these scenarios; no pressure stabilisation is credited. The baseline remains 1.00. Numerical data for every scenario are in results/design.json.
 
-## 7. Discrete optimisation and selected design
+![Material comparison and scenarios](assets/trade_materials_comparison_barchart.png)
 
-All seven materials are checked. At every diameter the metal search continues above the minimum feasible shell thickness: a thicker wall can reduce amplified moment and joint mass. It stops only when increasing shell mass alone exceeds the best assembly mass at that diameter. The joint grid is searched for each candidate. This avoids assuming minimum shell thickness necessarily minimises total assembly mass.
+The following changes only pressure-end thrust in strength for the same baseline shell. It does not establish pressure-dependent stability or redesign the shell:
 
-{table(['Metal','OD (mm)','Nominal wall (mm)','Shell (kg)','Modelled assembly (kg)'],metal_rows)}
+{table(['Material','Wall-pressure strength U','Closed-end strength U'],[[r['material'],f"{r['wall_only_strength']:.6f}",f"{r['closed_end_strength']:.6f}"] for r in d['pressure_scenarios']])}
 
-Composite candidates remain separate because adhesive, bearing, interlaminar and connection properties are absent:
+## 7. Concept and mass boundary
 
-{table(['Composite','OD (mm)','Nominal wall (mm)','Shell (kg)','Interface status'],comp_rows)}
+![Shell concept](assets/thrust_barrel_cad_drawing.png)
 
-An 8-ply `[0/+45/-45/90]s` block is symmetric and in-plane QI for identical plies; repeated blocks give the assumed 1 mm increments. This is an orientation/thickness convention only. Actual axial and bending stiffnesses and allowables still require a selected material system and lamination analysis. Stiffened and sandwich designs are permitted by the brief but not declared inferior without a comparable panel/core/interface analysis.
+Rigid rings are shown schematically as prescribed boundaries. Their dimensions, stiffness, joints and mass are unresolved. Earlier bolt counts, flange dimensions, prying multipliers, root stress factors and fabricated hardware mass are removed. Shell mass must not be presented as total structural mass. Stiffened, hybrid and sandwich alternatives have not been ranked without their additional failure checks and material data.
 
-![Material trade](assets/trade_study_diameter_vs_mass.png)
-
-### Selected all-metal dimensions
-
-- Material: **{s['material']}**.
-- OD: **{s['diameter_mm']:.0f} mm**; nominal shell ID: **{s['diameter_mm']-2*s['nominal_t_mm']:.2f} mm**.
-- Nominal shell wall: **{s['nominal_t_mm']:.2f} mm**; analysed minimum: **{s['minimum_t_mm']:.4f} mm**.
-- Length: **1500 mm between mating faces**, including integral flanges.
-- Each flange: **{j['flange_t_mm']:.1f} mm axial thickness**, **{j['flange_width_mm']:.1f} mm radial width**; bore **{j['flange_bore_mm']:.1f} mm**.
-- Each end: **{j['bolts_per_end']} x {j['bolt_d_mm']:.0f} mm Ti-6Al-4V fasteners**, holes **{j['hole_mm']:.1f} mm**, bolt circle **{j['bolt_circle_mm']:.1f} mm**.
-- Ring/shell relative stiffness indicator: **{j['rigidity_indicator']:.1f}**, informational only.
-
-{mass_table}
-
-### Recalculated design-state checks
-
-```text
-Factored compression = {s['applied']['P']/1000:.6f} kN
-Factored shear       = {s['applied']['V']/1000:.6f} kN
-Factored pressure    = {s['applied']['p']/1e6:.6f} MPa
-First-order M        = {s['applied']['first_order_M']/1000:.6f} kN m
-Amplified M + bow    = {s['applied']['M']/1000:.6f} kN m
-Euler capacity      = {s['pcr']/1000:.6f} kN
-Worst strength case = {s['strength_state']['case']}, theta = {s['strength_state']['theta_deg']:.3f} deg
-Axial stress there  = {s['strength_state']['axial']/1e6:.6f} MPa
-Hoop stress there   = {s['strength_state']['hoop']/1e6:.6f} MPa
-Local ratios        = compression {s['ratios']['compression']:.6f}, bending {s['ratios']['bending']:.6f}, shear {s['ratios']['shear']:.6f}
-Bolt tension bound  = {j['bolt_tension']/1000:.6f} kN per bolt
-Bolt shear bound    = {j['bolt_shear']/1000:.6f} kN per bolt
-```
-
-{margins}
-
-These are capacity/demand margins at the factored state, not exact nonlinear proportional-load reserve factors. A small positive value is not rounded to manufacture an extra margin; 5% thickness reduction is already included. Model uncertainty is addressed by the explicit sensitivity study, not hidden inside displayed precision.
-
-![Checks and mass](assets/failure_modes_vs_diameter.png)
-
-![Concept drawing](assets/thrust_barrel_cad_drawing.png)
-
-## 8. Larger moment-transfer envelope
-
-If the bottom barrel section must carry M + V*L rather than the assignment's prescribed M, use the separate design:
-
-{table(['Item','Transfer-envelope result'],[
- ['Material',transfer['material']],['OD / nominal wall',f"{transfer['diameter_mm']:.0f} / {transfer['nominal_t_mm']:.2f} mm"],
- ['Modelled assembly mass',f"{transfer['objective_mass']:.6f} kg"],['Flange thickness',f"{tj['flange_t_mm']:.1f} mm"],
- ['Bolts per end',f"{tj['bolts_per_end']} x {tj['bolt_d_mm']:.0f} mm Ti-6Al-4V"],
- ['Bolt circle',f"{tj['bolt_circle_mm']:.1f} mm"],['Governing shell check',transfer['governing']]])}
-
-All associated details and margins are in `results/design.json` under `transfer_selected`; its diameter sweep is in `results/transfer_trade_study.csv`. The primary drawing shows only the brief-moment design. Do not combine one design's wall with the other's load or mass.
-
-## 9. Sensitivity and what the results actually establish
-
-{table(['Load factor','Reduction cap','Reoptimised OD (mm)','Wall (mm)','Assembly (kg)','Original selected shell utilisation'],[
- [f"{r['load_factor']:.2f}",f"{r['kdf_cap']:.2f}",r['diameter_mm'],f"{r['nominal_t_mm']:.2f}",f"{r['total_mass']:.3f}",f"{r['original_shell_utilisation']:.3f}"] for r in data['sensitivities']])}
-
-Sensitivity reoptimises the selected metal at 2 mm diameter spacing. Its central point can differ slightly from the primary 1 mm search. A reduction cap of 0.20 requires a heavier design; the baseline is NOT claimed to pass every alternative assumption.
-
-The full assembly search now covers 40-300 mm, removing the earlier assumed 100 mm no-necking restriction. Joint geometry searches every integer bolt count and five flange widths. Dimensions below 40 mm, other bolt sizes, other wall grids and other structural families are not covered; this is not an unrestricted global optimum. Unknown composite interface mass and properties prevent a fair full-assembly ranking. The carbon shell's allowable interface-mass budget to beat the selected metal is **{s['objective_mass']-next(x['shell_mass'] for x in data['winners'] if x['material']=='Carbon/Epoxy QI'):.3f} kg**, but a light joint still needs a valid strength/stability model.
-
-![Sensitivity](assets/trade_materials_comparison_barchart.png)
-
-## 10. Improvement achieved and remaining design space
-
-The previous, narrower search used a minimum diameter of 100 mm, only nine bolt counts and flange width fixed at 4*d. Its primary assembly weighed 3.113879737 kg and its transfer-envelope assembly weighed 4.738748920 kg. With the SAME load factor, thickness allowance, bow, buckling reduction and joint stress assumptions, the expanded search gives:
-
-{table(['Case','Previous modelled mass (kg)','Expanded search (kg)','Reduction'],[
- ['Brief moment','3.113880',f"{s['objective_mass']:.6f}",f"{100*(1-s['objective_mass']/3.113879737):.2f}%"],
- ['Transfer envelope','4.738749',f"{transfer['objective_mass']:.6f}",f"{100*(1-transfer['objective_mass']/4.738748920):.2f}%"]])}
-
-This comparison measures a geometric search improvement, not an independently validated increase in structural performance. The smaller flange remains conditional on the prescribed rigid-ring boundary and the documented joint approximations.
-
-| Possible further improvement | What must be established before ranking it |
-|---|---|
-| Ring/stringer stiffened metal barrel | Skin panel compression/shear buckling, stringer local buckling/crippling and column failure, overall stiffened-shell instability, ring stiffness, eccentricity and all added mass |
-| Composite shell with metal end inserts | Actual laminate stiffness and allowables, load transfer, bearing/interlaminar/bond stresses, insert and attachment mass |
-| Sandwich shell | Core shear, face wrinkling, face/core bond and end inserts; supplied data do not define a core |
-| Different safety/imperfection factors | An accepted design basis; reducing an assumed factor is not a geometric optimisation gain |
-| Finer continuous dimensions | Manufacturing tolerances and meaningful practical increments; the current winner is a discrete-grid result |
-
-[NASA TM-108399](https://ntrs.nasa.gov/citations/19930013915) provides analytical methods for stiffened cylinders, including overall instability, stringer failures and skin buckling. Adding ribs and checking only the skin panel would omit failure modes addressed by that reference. No stiffened result has been implemented or ruled out by this study.
-
-The recommended course candidate is the minimum of the implemented family for the prescribed brief loads. If the actual barrel must transmit the larger bottom-section moment, select the separately sized transfer candidate. Neither candidate is labelled the absolute best architecture: the missing interface properties and unchecked structural families prevent that conclusion.
-
-## 11. Reproduction and verification
+## 8. Reproduction and verification
 
 ```sh
 python3 parametric_diameter_study.py
@@ -296,120 +160,73 @@ python3 generate_report.py
 .venv/bin/python generate_outputs.py
 ```
 
-The analysis and tests use only the Python standard library. Graphics use the pinned dependencies. All paths are relative to the script location; outputs go to `results/` and `assets/`. Importing modules does not generate files or print results. JSON is the numerical source for the reports and drawing; plots read JSON/CSV rather than duplicate equations.
+Tests cover load derivation, exact section properties, beam-column limits, bending equilibrium, angular failure maximisation, removal of added allowances, explicit pressure scenarios and rechecking every material's saved result. Passing tests validates these implementation checks, not the unresolved physical approximations.
 
-Verification includes load derivation, exact annular section numbers, zero-load and quarter-Euler secant limits, rejection of the Euler singularity, zero axial resultant under pure bending, angular-extremum comparison against a dense independent scan, rejection of the old 1.4 mm proposal, tolerance effects, both moment envelopes, explicit unresolved composite joints, manufacturing grids, mass closure, physical hole/washer clearance, discrete bolt-group force/moment equilibrium and rechecking selected margins. Passing software tests establishes implementation consistency, not experimental validation of the engineering assumptions.
-
-## 12. Sources and remaining acceptance decisions
-
-{source_text}
-
-Before presenting this as the final course submission, attach the instructor's accepted factors, moment convention and treatment of composite allowables to the stated basis. No user confirmation was required to complete this theoretical study: conservative scenarios and explicit assumptions were used. If actual joint qualification or material data become available, replace the provisional joint/laminate models and regenerate the results. No physical build or equipment operation is authorised or performed by this work.
+The challenge PDF sections 6-8 are the source for required methods, end conditions, manufacturing realism and unspecified required safety factors. The user's clarification governs bending transfer. Beam-column method reference: [Air Force Stress Analysis Manual](https://engineeringlibrary.org/reference/beam-columns-air-force-stress-manual). Composite knockdown limitations: [NASA bulletin](https://ntrs.nasa.gov/citations/20240000391).
 '''
     (ROOT/'The_Drakkar_Ascent_Challenge_Solution.md').write_text(report)
-    presentation=f'''# Drakkar Ascent — corrected design review notes
+    (ROOT/'House_Veridian_Design_Review_Presentation.md').write_text(f'''# Drakkar Ascent - design review notes
 
-Numerical source: `results/design.json`. This is a presentation script, not a claim of flight qualification.
+## Objective and requirements
 
-## 1. Design objective and explicit basis
+1500 mm barrel, OD <= 300 mm; supplied loads and seven materials. K = 1 for buckling; shell and joints still transfer bending. No FEA.
 
-Minimise modelled structural assembly mass in a discrete unstiffened-barrel family. L = 1500 mm between mating faces; OD <= 300 mm. Use K = 1 for buckling while retaining joint-transferred bending. Project assumptions: 1.5 load factor, 5% wall-thickness reduction, 1.5 mm initial bow and 0.35 shell/ovalisation reduction cap. These factors are not specified by the brief.
+## Corrected basis
 
-## 2. Loads
+Use service loads and nominal thickness. Remove arbitrary 1.5 load factor, 5% wall loss, 1.5 mm bow and 0.35 caps. Retain required geometric shell knockdowns. Required safety factors are unspecified.
 
-F = 30 kN; p = 0.3 MPa; V = {loads['V']/1000:.6f} kN; M = {loads['M']/1000:.6f} kN m. Separate transfer scenario M + V*L = {2*loads['M']/1000:.6f} kN m. No helpful pressure stabilisation is used in buckling.
+## Current material screens
 
-## 3. What changed from the original analysis
+{results}
 
-Actual axial force in Euler; explicit secant amplification and initial bow; exact A/I and mean radius; co-located circumferential stress checks; local combined-load screen; interior ovalisation check; manufacturable thickness grid; joint and hardware mass. The nine-ply non-QI specification and rounded-negative passing margin have been removed.
+## What the result means
 
-## 4. Material and diameter trade
+The smallest screened metal shell is {s['material']}, {s['shell_mass']:.6f} kg. ALL rows are shell-only. Connections, manufacturing qualification and required safety factors remain unresolved. The old 2.878 kg assembly is from a different assumed basis and is not the current result.
 
-{table(['Metal','OD (mm)','Wall (mm)','Shell (kg)','Modelled assembly (kg)'],metal_rows)}
+## Evidence and limitations
 
-![Trade](assets/trade_study_diameter_vs_mass.png)
+See the full report for equations, pressure treatment, composite interaction assumptions, long-shell extrapolation and all-material scenario results. A numerical screen is not a passing competition entry. Rings and joints need a defined design before total structural mass can be ranked.
+''')
+    (ROOT/'README.md').write_text(f'''# Drakkar Ascent - requirement-led shell study
 
-Composites are evaluated separately as shell-only candidates, because their joints and actual laminate stiffness/allowables are not established. No universal winner is claimed.
+**Current status: service-load screening; competition compliance unresolved.** The lowest screened metal-shell mass is **{s['material']}: {s['shell_mass']:.6f} kg**, {s['diameter_mm']:.0f} mm OD x {s['nominal_t_mm']:.2f} mm nominal wall. This is not total assembly mass or a final passing design.
 
-## 5. Selected all-metal concept
+The brief does not supply numerical safety factors, tolerances, imperfection amplitude or connection details. Unsupported numerical allowances and the assumed joint model have been removed. Geometry-dependent shell knockdowns remain because the brief requires them. All seven materials, both moment cases and illustrative load multipliers are included.
 
-{s['material']}; OD {s['diameter_mm']:.0f} mm; nominal wall {s['nominal_t_mm']:.2f} mm; minimum analysed {s['minimum_t_mm']:.4f} mm. Each integral flange is {j['flange_t_mm']:.1f} mm thick with {j['bolts_per_end']} x {j['bolt_d_mm']:.0f} mm titanium bolts on {j['bolt_circle_mm']:.1f} mm PCD.
+Read the [full report](The_Drakkar_Ascent_Challenge_Solution.md), [PDF report](output/pdf/Drakkar_Analytical_Report.pdf), [PDF summary](output/pdf/Drakkar_Results_Summary.pdf) or [file guide](PROJECT_FILES_GUIDE_AND_EXPLANATION.md). Results are in [JSON](results/design.json) and [CSV](results/trade_study.csv). Earlier assembly results remain in Git history at 472798d.
 
-{mass_table}
+```sh
+python3 parametric_diameter_study.py
+python3 -m unittest discover -s tests -v
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python plot_trade_studies.py
+.venv/bin/python generate_engineering_drawing.py
+python3 generate_report.py
+.venv/bin/python generate_outputs.py
+```
 
-![Drawing](assets/thrust_barrel_cad_drawing.png)
-
-## 6. Verification
-
-{margins}
-
-All IMPLEMENTED checks pass at factored loads. The rigid-ring idealisation, empirical long-shell extrapolation, transverse-shear surrogate and assumed joint prying/root factors remain model limitations.
-
-## 7. Alternative moment envelope and sensitivity
-
-The transfer-envelope candidate is {transfer['material']}, {transfer['diameter_mm']:.0f} mm OD x {transfer['nominal_t_mm']:.2f} mm wall, {transfer['objective_mass']:.3f} kg. It is a separate design, not the brief candidate checked with an unreported extra moment.
-
-![Sensitivity](assets/trade_materials_comparison_barchart.png)
-
-No guaranteed score, unrestricted global optimum, impact resistance or flight readiness is claimed. Instructor acceptance of the explicit design basis and additional laminate/joint data determine whether further refinement is appropriate.
-'''
-    (ROOT/'House_Veridian_Design_Review_Presentation.md').write_text(presentation)
-    (ROOT/'PROJECT_FILES_GUIDE_AND_EXPLANATION.md').write_text('''# Project file guide
-
-The corrected solution is generated from one calculation model. All file links are repository-relative.
+Python >= 3.10. Core calculations/tests use the standard library. Graphics/PDF dependencies are pinned. The ZIP bundle and local inspection files are excluded from Git. No FEA or physical testing is used.
+''')
+    (ROOT/'PROJECT_FILES_GUIDE_AND_EXPLANATION.md').write_text('''# File guide
 
 | File | Purpose |
 |---|---|
-| [Solution report](The_Drakkar_Ascent_Challenge_Solution.md) | Design basis, readable equations, assumptions, selected designs, margins and sources |
-| [Design review notes](House_Veridian_Design_Review_Presentation.md) | Seven-part presentation script with generated numerical tables |
-| [Analytical model](parametric_diameter_study.py) | Standard-library mechanics, connection model, discrete search and sensitivities |
-| [Numerical results](results/design.json) | Full selected candidates, material minima and assumptions |
-| [Primary sweep](results/trade_study.csv) | Best candidate at each diameter for the brief moment |
-| [Transfer sweep](results/transfer_trade_study.csv) | Separate larger moment-transfer envelope |
-| [Plot generator](plot_trade_studies.py) | Three figures generated from JSON/CSV, no duplicated mechanics |
-| [Concept drawing generator](generate_engineering_drawing.py) | Selected primary design dimensions, not a manufacturing release |
-| [PDF/package exporter](generate_outputs.py) | Printable report, summary and local ZIP generated from current results |
-| [Report generator](generate_report.py) | Keeps solution and review notes consistent with results |
-| [Verification cases](tests/test_analysis.py) | Independent limits, numerical checks and output consistency |
-| [Historical audit](docs/RESEARCH_AUDIT.md) | Findings against the old research commit; historical numbers are not current results |
+| [Model](parametric_diameter_study.py) | Service-load shell mechanics, material search and explicit scenarios |
+| [Results](results/design.json) | All seven materials; assembly mass and required safety factor explicitly unresolved |
+| [Brief sweep](results/trade_study.csv) | Shell screening across diameter |
+| [Transfer sweep](results/transfer_trade_study.csv) | Separate M + V*L scenario |
+| [Full report](The_Drakkar_Ascent_Challenge_Solution.md) | Requirements, removed assumptions, equations and limitations |
+| [Review notes](House_Veridian_Design_Review_Presentation.md) | Short presentation script |
+| [Report generator](generate_report.py) | Regenerates Markdown reports |
+| [Plot generator](plot_trade_studies.py) | Three current figures |
+| [Drawing generator](generate_engineering_drawing.py) | Shell concept with unspecified end boundaries |
+| [Output exporter](generate_outputs.py) | PDFs and local ZIP |
+| [Tests](tests/test_analysis.py) | Mechanics checks and result consistency |
+| [Historical audit](docs/RESEARCH_AUDIT.md) | Audit of the original research revision, not current results |
 
-Canonical figures:
-
-- [Diameter trade](assets/trade_study_diameter_vs_mass.png): metal assembly mass and composite shell-only mass in separate panels.
-- [Checks and mass](assets/failure_modes_vs_diameter.png): selected candidates' utilisations and mass breakdown. Filename retained; obsolete Euler-cliff interpretation removed.
-- [Materials and sensitivity](assets/trade_materials_comparison_barchart.png): metal assembly minima and assumption sensitivity.
-- [Concept drawing](assets/thrust_barrel_cad_drawing.png): primary brief-moment design only.
-
-Read the report's applicability statements before treating a numerical pass as a validated structural design. The composite plots deliberately exclude unknown joint mass; do not compare their shell-only ordinate directly with metal assembly mass.
+All current masses are shell-only. Historical assembly masses must not be combined with the current basis.
 ''')
-    readme=f'''# Drakkar Ascent — corrected analytical design
-
-Reproducible theoretical thrust-barrel study: no FEA or hardware testing.
-
-**Primary all-metal candidate under the documented assumptions:** {s['material']}, {s['diameter_mm']:.0f} mm OD x {s['nominal_t_mm']:.2f} mm nominal wall, **{s['objective_mass']:.3f} kg modelled structural assembly**. This is a discrete-family result, not a flight-qualified or unrestricted global optimum. Composite shell candidates are kept separate because interface and ply-level data are missing.
-
-Printable outputs: [full PDF report](output/pdf/Drakkar_Analytical_Report.pdf) and [one-page results summary](output/pdf/Drakkar_Results_Summary.pdf). Run `generate_outputs.py` to refresh the PDFs and a local ZIP bundle; the redundant ZIP is excluded from Git.
-
-Start with the [complete solution](The_Drakkar_Ascent_Challenge_Solution.md), [design review notes](House_Veridian_Design_Review_Presentation.md), or [file guide](PROJECT_FILES_GUIDE_AND_EXPLANATION.md).
-
-Python >= 3.10:
-
-```sh
-python3 parametric_diameter_study.py
-python3 -m unittest discover -s tests -v
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python plot_trade_studies.py
-.venv/bin/python generate_engineering_drawing.py
-python3 generate_report.py
-.venv/bin/python generate_outputs.py
-```
-
-The model/tests need only the standard library. Graphics and PDF dependencies are pinned in `requirements.txt`. JSON/CSV files in `results/` are the numerical source; generators update canonical files in `assets/`. All equations in the report use plain text. The original research audit is preserved in [docs/RESEARCH_AUDIT.md](docs/RESEARCH_AUDIT.md).
-
-Key assumptions: factor 1.5 on all loads, 95% wall thickness, 1.5 mm bow, conservative pressure cases and a provisional 0.35 shell/ovalisation cap. The report identifies empirical applicability limits and assumed joint behaviour explicitly. Change the `Basis` parameters in the model and rerun all generators when the course design basis changes.
-'''
-    (ROOT/'README.md').write_text(readme)
-    print('Generated solution, review notes, guide and README')
+    print('Updated requirement-led report, README, notes and guide')
 
 if __name__=='__main__':main()
