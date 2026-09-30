@@ -1,0 +1,4 @@
+# Python >= 3.10. Core analysis and tests use only the standard library.
+matplotlib==3.10.9
+numpy==2.2.6
+reportlab==5.0.1

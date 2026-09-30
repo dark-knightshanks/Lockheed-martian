@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local PDF inspection and tool caches
+/tmp/
+
+# Machine metadata and redundant downloadable bundle
+.DS_Store
+/output/*.zip

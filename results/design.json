@@ -1,0 +1,1999 @@
+{
+  "basis": {
+    "length": 1.5,
+    "load_factor": 1.5,
+    "thickness_retention": 0.95,
+    "kdf_cap": 0.35,
+    "moment_case": "brief",
+    "initial_bow": 0.0015,
+    "diameter_min_mm": 40,
+    "diameter_max_mm": 300
+  },
+  "loads": {
+    "q": 24500.0,
+    "alpha": 0.09966865249116204,
+    "f": 488.376397206694,
+    "F": 30000.0,
+    "p": 300000.0,
+    "V": 1465.1291916200819,
+    "M": 2197.693787430123
+  },
+  "materials": [
+    {
+      "name": "Aluminium 7075-T6",
+      "E": 71700000000.0,
+      "nu": 0.33,
+      "density": 2810,
+      "yield_stress": 503000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0
+    },
+    {
+      "name": "Titanium Ti-6Al-4V",
+      "E": 113800000000.0,
+      "nu": 0.31,
+      "density": 4430,
+      "yield_stress": 880000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0
+    },
+    {
+      "name": "Steel 4130",
+      "E": 205000000000.0,
+      "nu": 0.29,
+      "density": 7850,
+      "yield_stress": 460000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0
+    },
+    {
+      "name": "Magnesium AZ31B",
+      "E": 45000000000.0,
+      "nu": 0.35,
+      "density": 1770,
+      "yield_stress": 220000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0
+    },
+    {
+      "name": "Carbon/Epoxy QI",
+      "E": 55000000000.0,
+      "nu": 0.3,
+      "density": 1600,
+      "yield_stress": 0.0,
+      "Xc": 600000000.0,
+      "Yt": 500000000.0,
+      "S": 200000000.0
+    },
+    {
+      "name": "Glass/Epoxy QI",
+      "E": 25000000000.0,
+      "nu": 0.3,
+      "density": 1900,
+      "yield_stress": 0.0,
+      "Xc": 300000000.0,
+      "Yt": 250000000.0,
+      "S": 100000000.0
+    },
+    {
+      "name": "Aramid/Epoxy QI",
+      "E": 35000000000.0,
+      "nu": 0.34,
+      "density": 1400,
+      "yield_stress": 0.0,
+      "Xc": 200000000.0,
+      "Yt": 300000000.0,
+      "S": 80000000.0
+    }
+  ],
+  "winners": [
+    {
+      "material": "Aluminium 7075-T6",
+      "diameter_mm": 160.0,
+      "nominal_t_mm": 1.4,
+      "minimum_t_mm": 1.33,
+      "shell_mass": 2.940212166264969,
+      "utilisation": 0.9964118148385915,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.44396979393153085,
+        "Euler": 0.06857244362262334,
+        "shell_interaction": 0.94368315166863,
+        "ovalisation": 0.9964118148385915
+      },
+      "margins": {
+        "strength": 1.252405487194519,
+        "Euler": 13.583117461925788,
+        "shell_interaction": 0.05967770880701839,
+        "ovalisation": 0.0036011065986705226
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 3669.003342091204,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.08,
+        "ri": 0.07867,
+        "r": 0.079335,
+        "A": 0.0006629737534389731,
+        "I": 2.0865389908898674e-06
+      },
+      "pcr": 656240.2857866604,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 257306149.4654256,
+      "sigma_bending_cr": 257306149.4654256,
+      "tau_cr": 49783435.3646108,
+      "classical_brazier": 10520.61661210558,
+      "ratios": {
+        "compression": 0.2637946677689954,
+        "bending": 0.5467155466993219,
+        "shear": 0.13317293720031276
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.19710917792360597,
+        "utilisation": 0.44396979393153085,
+        "theta_deg": 180.0,
+        "axial": -208549262.387239,
+        "hoop": 27067669.17293233,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.19710917792360597,
+          "utilisation": 0.44396979393153085,
+          "theta_deg": 180.0,
+          "axial": -208549262.387239,
+          "hoop": 27067669.17293233,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.17462928029853647,
+          "utilisation": 0.4178866835621069,
+          "theta_deg": 180.0,
+          "axial": -195351984.80587777,
+          "hoop": 27067669.17293233,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.17190216491216306,
+          "utilisation": 0.41461085961677735,
+          "theta_deg": 180.0,
+          "axial": -208549262.387239,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 59.650375939849624,
+      "L_over_r": 18.907165815844206,
+      "shear_gZ": 11801.277151595055,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 35,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 148.0,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 10.0,
+        "flange_bore_mm": 136.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.2743633037824486,
+        "root_band_extra_mass": 0.03868374981256591,
+        "fastener_mass": 0.18651404740134417,
+        "total_mass": 3.439773267261328,
+        "bolt_tension": 6166.382922413859,
+        "bolt_shear": 125.58250213886417,
+        "utilisations": {
+          "bolt": 0.9919401095869518,
+          "flange": 0.9181040067732293,
+          "washer_bearing": 0.2729307868403117,
+          "thread_strip": 0.9198336269919467,
+          "bearing": 0.005840163795652479,
+          "pullthrough": 0.09881369924785306
+        },
+        "margins": {
+          "bolt": 0.008125380086106526,
+          "flange": 0.08920121535533054,
+          "washer_bearing": 2.66393257271151,
+          "thread_strip": 0.08715312275570364,
+          "bearing": 170.2280742441535,
+          "pullthrough": 9.120054280041815
+        },
+        "rigidity_indicator": 530.2455878285775
+      },
+      "objective_mass": 3.439773267261328,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Titanium Ti-6Al-4V",
+      "diameter_mm": 152.0,
+      "nominal_t_mm": 1.15,
+      "minimum_t_mm": 1.0925,
+      "shell_mass": 3.62149602489695,
+      "utilisation": 0.9758030765371024,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.33079112077884265,
+        "Euler": 0.06113873639947357,
+        "shell_interaction": 0.9151641867785152,
+        "ovalisation": 0.9758030765371024
+      },
+      "margins": {
+        "strength": 2.0230557508481946,
+        "Euler": 15.356242521371612,
+        "shell_interaction": 0.09270010173815568,
+        "ovalisation": 0.02479693295164309
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 3633.73430526553,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.076,
+        "ri": 0.0749075,
+        "r": 0.07545375,
+        "A": 0.0005179432085084746,
+        "I": 1.4744721224596557e-06
+      },
+      "pcr": 736030.9134617225,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 350211257.81462914,
+      "sigma_bending_cr": 350211257.81462914,
+      "tau_cr": 64159093.989114344,
+      "classical_brazier": 10639.542203420815,
+      "ratios": {
+        "compression": 0.24808486405978886,
+        "bending": 0.5348107062457291,
+        "shear": 0.13226861647299712
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.10942276558612285,
+        "utilisation": 0.33079112077884265,
+        "theta_deg": 180.0,
+        "axial": -274178842.41419685,
+        "hoop": 31304347.826086957,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.10942276558612285,
+          "utilisation": 0.33079112077884265,
+          "theta_deg": 180.0,
+          "axial": -274178842.41419685,
+          "hoop": 31304347.826086957,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.09826155312422037,
+          "utilisation": 0.31346698889072894,
+          "theta_deg": 180.0,
+          "axial": -258863354.05356133,
+          "hoop": 31304347.826086957,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.09707391222570892,
+          "utilisation": 0.31156686637976916,
+          "theta_deg": 180.0,
+          "axial": -274178842.41419685,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 69.06521739130436,
+      "L_over_r": 19.879727647731226,
+      "shear_gZ": 15213.88656457517,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 36,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 139.99999999999997,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 8.0,
+        "flange_bore_mm": 128.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.3354665357089927,
+        "root_band_extra_mass": 0.047734446555099994,
+        "fastener_mass": 0.1758103418996157,
+        "total_mass": 4.180507349060658,
+        "bolt_tension": 6208.529629545862,
+        "bolt_shear": 122.0940993016735,
+        "utilisations": {
+          "bolt": 0.9986780013832905,
+          "flange": 0.9100322696066238,
+          "washer_bearing": 0.15707103592088856,
+          "thread_strip": 0.9261206122432327,
+          "bearing": 0.004056821481315573,
+          "pullthrough": 0.07108381892217794
+        },
+        "margins": {
+          "bolt": 0.0013237486105415197,
+          "flange": 0.09886213203435767,
+          "washer_bearing": 5.366546156247844,
+          "thread_strip": 0.07977296561602043,
+          "bearing": 245.49839895733183,
+          "pullthrough": 13.067899209168727
+        },
+        "rigidity_indicator": 878.8300008980639
+      },
+      "objective_mass": 4.180507349060658,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Steel 4130",
+      "diameter_mm": 150.0,
+      "nominal_t_mm": 0.8500000000000001,
+      "minimum_t_mm": 0.8075000000000001,
+      "shell_mass": 4.689785417591667,
+      "utilisation": 0.9920251660259645,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.8603333668421266,
+        "Euler": 0.047520971657112776,
+        "shell_interaction": 0.9566636200191582,
+        "ovalisation": 0.9920251660259645
+      },
+      "margins": {
+        "strength": 0.16234013295395378,
+        "Euler": 20.043340763642053,
+        "shell_interaction": 0.04529949615934381,
+        "ovalisation": 0.008038943211473804
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 3570.588286796644,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.075,
+        "ri": 0.0741925,
+        "r": 0.07459625,
+        "A": 0.000378476915041339,
+        "I": 1.0530672665296512e-06
+      },
+      "pcr": 946950.3343638924,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 460000000.0,
+      "sigma_bending_cr": 460000000.0,
+      "tau_cr": 79890300.17853527,
+      "classical_brazier": 10283.691552187873,
+      "ratios": {
+        "compression": 0.2584730615494388,
+        "bending": 0.5528242612984612,
+        "shear": 0.1453662971712583
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.7401735021019091,
+        "utilisation": 0.8603333668421266,
+        "theta_deg": 180.0,
+        "axial": -373196768.51003397,
+        "hoop": 41795665.63467492,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.7401735021019091,
+          "utilisation": 0.8603333668421266,
+          "theta_deg": 180.0,
+          "axial": -373196768.51003397,
+          "hoop": 41795665.63467492,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.6655838993802553,
+          "utilisation": 0.8158332546423045,
+          "theta_deg": 180.0,
+          "axial": -352635826.78976923,
+          "hoop": 41795665.63467492,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.6582033460601695,
+          "utilisation": 0.8112973228478999,
+          "theta_deg": 180.0,
+          "axial": -373196768.51003397,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 92.37925696594426,
+      "L_over_r": 20.108249409320173,
+      "shear_gZ": 20957.85145228805,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 36,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 137.99999999999997,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 11.0,
+        "flange_bore_mm": 126.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.8296843334533178,
+        "root_band_extra_mass": 0.06199593417153751,
+        "fastener_mass": 0.19985935932655172,
+        "total_mass": 5.781325044543074,
+        "bolt_tension": 6182.064136300159,
+        "bolt_shear": 122.0940993016735,
+        "utilisations": {
+          "bolt": 0.994425817237157,
+          "flange": 0.9861521055116925,
+          "washer_bearing": 0.29920282986636426,
+          "thread_strip": 0.9221727791377277,
+          "bearing": 0.005644273365308623,
+          "pullthrough": 0.0984776423182928
+        },
+        "margins": {
+          "bolt": 0.0056054284454620795,
+          "flange": 0.014042351490110239,
+          "washer_bearing": 2.34221437827523,
+          "thread_strip": 0.08439548707460687,
+          "bearing": 176.17072425058228,
+          "pullthrough": 9.154589168248641
+        },
+        "rigidity_indicator": 3550.484414905277
+      },
+      "objective_mass": 5.781325044543074,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Magnesium AZ31B",
+      "diameter_mm": 158.0,
+      "nominal_t_mm": 1.8000000000000003,
+      "minimum_t_mm": 1.7100000000000002,
+      "shell_mass": 2.3451354557331703,
+      "utilisation": 0.9938149534699178,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.8227568023476968,
+        "Euler": 0.08891626610080235,
+        "shell_interaction": 0.9199639092318641,
+        "ovalisation": 0.9938149534699178
+      },
+      "margins": {
+        "strength": 0.21542598875700358,
+        "Euler": 10.246536138464505,
+        "shell_interaction": 0.08699916373345884,
+        "ovalisation": 0.0062235394109204645
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 3768.539672777998,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.079,
+        "ri": 0.07729,
+        "r": 0.07814499999999999,
+        "A": 0.0008396091720685283,
+        "I": 2.5639027952074886e-06
+      },
+      "pcr": 506094.12623090274,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 212417984.1581673,
+      "sigma_bending_cr": 212417984.1581673,
+      "tau_cr": 43264484.17069368,
+      "classical_brazier": 10834.266651294714,
+      "ratios": {
+        "compression": 0.2523155731703741,
+        "bending": 0.5466474719524841,
+        "shear": 0.12100086410900589
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.6769287558094069,
+        "utilisation": 0.8227568023476968,
+        "theta_deg": 180.0,
+        "axial": -169714119.4618684,
+        "hoop": 20789473.684210524,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.6769287558094069,
+          "utilisation": 0.8227568023476968,
+          "theta_deg": 180.0,
+          "axial": -169714119.4618684,
+          "hoop": 20789473.684210524,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.6041588082072318,
+          "utilisation": 0.7772765326492443,
+          "theta_deg": 180.0,
+          "axial": -159655651.73486966,
+          "hoop": 20789473.684210524,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.5951008748908542,
+          "utilisation": 0.7714278157357655,
+          "theta_deg": 180.0,
+          "axial": -169714119.4618684,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 45.69883040935672,
+      "L_over_r": 19.195086057969164,
+      "shear_gZ": 9247.16297220097,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 36,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 146.0,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 16.0,
+        "flange_bore_mm": 134.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.2617209870506445,
+        "root_band_extra_mass": 0.030727980576614855,
+        "fastener_mass": 0.23994105503811178,
+        "total_mass": 2.877525478398541,
+        "bolt_tension": 6205.158001579654,
+        "bolt_shear": 122.0940993016735,
+        "utilisations": {
+          "bolt": 0.9981362841403675,
+          "flange": 0.9910370891357729,
+          "washer_bearing": 0.6279429452813613,
+          "thread_strip": 0.9256176696235405,
+          "bearing": 0.008113642962631146,
+          "pullthrough": 0.14209043174045577
+        },
+        "margins": {
+          "bolt": 0.0018671957820244334,
+          "flange": 0.00904397117169764,
+          "washer_bearing": 0.5925013689769725,
+          "thread_strip": 0.08035966989125387,
+          "bearing": 122.24919947866591,
+          "pullthrough": 6.037771563863027
+        },
+        "rigidity_indicator": 348.85385976246175
+      },
+      "objective_mass": 2.877525478398541,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Carbon/Epoxy QI",
+      "diameter_mm": 78.0,
+      "nominal_t_mm": 3.0,
+      "minimum_t_mm": 2.85,
+      "shell_mass": 1.6964600329384893,
+      "utilisation": 0.997135408011161,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.9459443677959714,
+        "Euler": 0.39211795139702044,
+        "shell_interaction": 0.977394913669824,
+        "ovalisation": 0.997135408011161
+      },
+      "margins": {
+        "strength": 0.057144620808913915,
+        "Euler": 1.55025304614911,
+        "shell_interaction": 0.023127894379254332,
+        "ovalisation": 0.0028728214501505533
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 6061.359430289226,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.039,
+        "ri": 0.03615,
+        "r": 0.037575,
+        "A": 0.0006728584605642273,
+        "I": 4.7568107352472114e-07
+      },
+      "pcr": 114761.38707670994,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 600000000.0,
+      "sigma_bending_cr": 600000000.0,
+      "tau_cr": 173418049.62480095,
+      "classical_brazier": 17367.921810507523,
+      "ratios": {
+        "compression": 0.11146474986300767,
+        "bending": 0.8282615914259706,
+        "shear": 0.03766857238084576
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.8948107469649199,
+        "utilisation": 0.9459443677959714,
+        "theta_deg": 180.0,
+        "axial": -563835804.773387,
+        "hoop": 6157894.736842105,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.8948107469649199,
+          "utilisation": 0.9459443677959714,
+          "theta_deg": 180.0,
+          "axial": -563835804.773387,
+          "hoop": 6157894.736842105,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.8861745970319099,
+          "utilisation": 0.9413684703833616,
+          "theta_deg": 180.0,
+          "axial": -561090090.9379001,
+          "hoop": 6157894.736842105,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.8830855965123692,
+          "utilisation": 0.9397263412889783,
+          "theta_deg": 180.0,
+          "axial": -563835804.773387,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 13.184210526315788,
+      "L_over_r": 39.920159680638726,
+      "shear_gZ": 11750.574543890105,
+      "connection": null,
+      "objective_mass": 1.6964600329384893,
+      "mass_scope": "shell only; interface unresolved"
+    },
+    {
+      "material": "Glass/Epoxy QI",
+      "diameter_mm": 124.0,
+      "nominal_t_mm": 3.0,
+      "minimum_t_mm": 2.85,
+      "shell_mass": 3.250134679771321,
+      "utilisation": 0.9975595957876049,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.61998335557505,
+        "Euler": 0.206081972511067,
+        "shell_interaction": 0.7953420269741327,
+        "ovalisation": 0.9975595957876049
+      },
+      "margins": {
+        "strength": 0.6129465267216327,
+        "Euler": 3.8524380265542053,
+        "shell_interaction": 0.25732070742506297,
+        "ovalisation": 0.002446374354675429
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 4443.513489550489,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.062,
+        "ri": 0.05915,
+        "r": 0.060575000000000004,
+        "A": 0.0010847212574498482,
+        "I": 1.991201795826325e-06
+      },
+      "pcr": 218359.71119493924,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 249159910.78709465,
+      "sigma_bending_cr": 249159910.78709465,
+      "tau_cr": 55096725.86373326,
+      "classical_brazier": 12726.811391417084,
+      "ratios": {
+        "compression": 0.16650075068199507,
+        "bending": 0.5552962625559006,
+        "shear": 0.07354501373623702
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.38437936119009897,
+        "utilisation": 0.61998335557505,
+        "theta_deg": 180.0,
+        "axial": -179842879.42474544,
+        "hoop": 9789473.684210526,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.38437936119009897,
+          "utilisation": 0.61998335557505,
+          "theta_deg": 180.0,
+          "axial": -179842879.42474544,
+          "hoop": 9789473.684210526,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.3657915923210533,
+          "utilisation": 0.6048070703299138,
+          "theta_deg": 180.0,
+          "axial": -175282996.07005247,
+          "hoop": 9789473.684210526,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.3593717919975948,
+          "utilisation": 0.5994762647491515,
+          "theta_deg": 180.0,
+          "axial": -179842879.42474544,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 21.25438596491228,
+      "L_over_r": 24.762690879075524,
+      "shear_gZ": 7288.944919301208,
+      "connection": null,
+      "objective_mass": 3.250134679771321,
+      "mass_scope": "shell only; interface unresolved"
+    },
+    {
+      "material": "Aramid/Epoxy QI",
+      "diameter_mm": 165.0,
+      "nominal_t_mm": 2.0,
+      "minimum_t_mm": 1.9,
+      "shell_mass": 2.1507343306475715,
+      "utilisation": 0.9978022864793133,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.7469770311309368,
+        "Euler": 0.09053008746740734,
+        "shell_interaction": 0.934452199016302,
+        "ovalisation": 0.9978022864793133
+      },
+      "margins": {
+        "strength": 0.33872924912561464,
+        "Euler": 10.046051406500851,
+        "shell_interaction": 0.07014569718247765,
+        "ovalisation": 0.0022025541036201357
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 3776.6308506754335,
+        "first_order_M": 3296.5406811451844
+      },
+      "section": {
+        "ro": 0.0825,
+        "ri": 0.0806,
+        "r": 0.08155000000000001,
+        "A": 0.0009735481474209415,
+        "I": 3.2376828303408174e-06
+      },
+      "pcr": 497072.31329253834,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 175218811.40010676,
+      "sigma_bending_cr": 175218811.40010676,
+      "tau_cr": 37178498.51980678,
+      "classical_brazier": 10814.140241295565,
+      "ratios": {
+        "compression": 0.2637997314673017,
+        "bending": 0.5492163441035202,
+        "shear": 0.12143612344548026
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.5579746850371885,
+        "utilisation": 0.7469770311309368,
+        "theta_deg": 180.0,
+        "axial": -142455710.41069877,
+        "hoop": 19539473.684210528,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.5579746850371885,
+          "utilisation": 0.7469770311309368,
+          "theta_deg": 180.0,
+          "axial": -142455710.41069877,
+          "hoop": 19539473.684210528,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.48993423652194235,
+          "utilisation": 0.6999530245108898,
+          "theta_deg": 180.0,
+          "axial": -133022163.02291602,
+          "hoop": 19539473.684210528,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.5073407357154218,
+          "utilisation": 0.7122785520534939,
+          "theta_deg": 180.0,
+          "axial": -142455710.41069877,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 42.92105263157895,
+      "L_over_r": 18.393623543838135,
+      "shear_gZ": 8006.248314688962,
+      "connection": null,
+      "objective_mass": 2.1507343306475715,
+      "mass_scope": "shell only; interface unresolved"
+    }
+  ],
+  "selected": {
+    "material": "Magnesium AZ31B",
+    "diameter_mm": 158.0,
+    "nominal_t_mm": 1.8000000000000003,
+    "minimum_t_mm": 1.7100000000000002,
+    "shell_mass": 2.3451354557331703,
+    "utilisation": 0.9938149534699178,
+    "governing": "ovalisation",
+    "passes": true,
+    "validity": true,
+    "utilisations": {
+      "strength": 0.8227568023476968,
+      "Euler": 0.08891626610080235,
+      "shell_interaction": 0.9199639092318641,
+      "ovalisation": 0.9938149534699178
+    },
+    "margins": {
+      "strength": 0.21542598875700358,
+      "Euler": 10.246536138464505,
+      "shell_interaction": 0.08699916373345884,
+      "ovalisation": 0.0062235394109204645
+    },
+    "applied": {
+      "P": 45000.0,
+      "V": 2197.693787430123,
+      "p": 450000.0,
+      "M": 3768.539672777998,
+      "first_order_M": 3296.5406811451844
+    },
+    "section": {
+      "ro": 0.079,
+      "ri": 0.07729,
+      "r": 0.07814499999999999,
+      "A": 0.0008396091720685283,
+      "I": 2.5639027952074886e-06
+    },
+    "pcr": 506094.12623090274,
+    "gx": 0.35,
+    "gb": 0.35,
+    "sigma_axial_cr": 212417984.1581673,
+    "sigma_bending_cr": 212417984.1581673,
+    "tau_cr": 43264484.17069368,
+    "classical_brazier": 10834.266651294714,
+    "ratios": {
+      "compression": 0.2523155731703741,
+      "bending": 0.5466474719524841,
+      "shear": 0.12100086410900589
+    },
+    "strength_state": {
+      "case": "wall_only",
+      "index": 0.6769287558094069,
+      "utilisation": 0.8227568023476968,
+      "theta_deg": 180.0,
+      "axial": -169714119.4618684,
+      "hoop": 20789473.684210524,
+      "shear": 0.0
+    },
+    "strength_states": [
+      {
+        "case": "wall_only",
+        "index": 0.6769287558094069,
+        "utilisation": 0.8227568023476968,
+        "theta_deg": 180.0,
+        "axial": -169714119.4618684,
+        "hoop": 20789473.684210524,
+        "shear": 0.0
+      },
+      {
+        "case": "closed_end",
+        "index": 0.6041588082072318,
+        "utilisation": 0.7772765326492443,
+        "theta_deg": 180.0,
+        "axial": -159655651.73486966,
+        "hoop": 20789473.684210524,
+        "shear": 0.0
+      },
+      {
+        "case": "unpressurised",
+        "index": 0.5951008748908542,
+        "utilisation": 0.7714278157357655,
+        "theta_deg": 180.0,
+        "axial": -169714119.4618684,
+        "hoop": 0.0,
+        "shear": 0.0
+      }
+    ],
+    "r_over_t": 45.69883040935672,
+    "L_over_r": 19.195086057969164,
+    "shear_gZ": 9247.16297220097,
+    "connection": {
+      "bolt_material": "Titanium Ti-6Al-4V",
+      "bolts_per_end": 36,
+      "bolt_d_mm": 4.0,
+      "hole_mm": 4.500000000000001,
+      "bolt_circle_mm": 146.0,
+      "flange_width_mm": 12.0,
+      "flange_t_mm": 16.0,
+      "flange_bore_mm": 134.0,
+      "root_band_mm": 20.0,
+      "ring_extra_mass": 0.2617209870506445,
+      "root_band_extra_mass": 0.030727980576614855,
+      "fastener_mass": 0.23994105503811178,
+      "total_mass": 2.877525478398541,
+      "bolt_tension": 6205.158001579654,
+      "bolt_shear": 122.0940993016735,
+      "utilisations": {
+        "bolt": 0.9981362841403675,
+        "flange": 0.9910370891357729,
+        "washer_bearing": 0.6279429452813613,
+        "thread_strip": 0.9256176696235405,
+        "bearing": 0.008113642962631146,
+        "pullthrough": 0.14209043174045577
+      },
+      "margins": {
+        "bolt": 0.0018671957820244334,
+        "flange": 0.00904397117169764,
+        "washer_bearing": 0.5925013689769725,
+        "thread_strip": 0.08035966989125387,
+        "bearing": 122.24919947866591,
+        "pullthrough": 6.037771563863027
+      },
+      "rigidity_indicator": 348.85385976246175
+    },
+    "objective_mass": 2.877525478398541,
+    "mass_scope": "barrel + integral flanges + modelled fasteners"
+  },
+  "transfer_basis": {
+    "length": 1.5,
+    "load_factor": 1.5,
+    "thickness_retention": 0.95,
+    "kdf_cap": 0.35,
+    "moment_case": "transfer",
+    "initial_bow": 0.0015,
+    "diameter_min_mm": 40,
+    "diameter_max_mm": 300
+  },
+  "transfer_winners": [
+    {
+      "material": "Aluminium 7075-T6",
+      "diameter_mm": 207.0,
+      "nominal_t_mm": 1.7000000000000002,
+      "minimum_t_mm": 1.6150000000000002,
+      "shell_mass": 4.6215251673037905,
+      "utilisation": 0.9789566916825493,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.375446701053523,
+        "Euler": 0.02603818446060737,
+        "shell_interaction": 0.7964352556775975,
+        "ovalisation": 0.9789566916825493
+      },
+      "margins": {
+        "strength": 1.6634939052439344,
+        "Euler": 37.40513540845673,
+        "shell_interaction": 0.2555948432358284,
+        "ovalisation": 0.02149564786291336
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 6879.999239492874,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.1035,
+        "ri": 0.10188499999999999,
+        "r": 0.10269249999999999,
+        "A": 0.00104205615155943,
+        "I": 5.494971338560959e-06
+      },
+      "pcr": 1728231.093380553,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 241377703.37468812,
+      "sigma_bending_cr": 241377703.37468812,
+      "tau_cr": 52291433.06456192,
+      "classical_brazier": 20079.683658406073,
+      "ratios": {
+        "compression": 0.1789057262377956,
+        "bending": 0.5368663176444142,
+        "shear": 0.08066321179538784
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.14096022533197347,
+        "utilisation": 0.375446701053523,
+        "theta_deg": 180.0,
+        "axial": -172771412.0920943,
+        "hoop": 28839009.287925694,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.14096022533197347,
+          "utilisation": 0.375446701053523,
+          "theta_deg": 180.0,
+          "axial": -172771412.0920943,
+          "hoop": 28839009.287925694,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.1209054046224142,
+          "utilisation": 0.3477145447380857,
+          "theta_deg": 180.0,
+          "axial": -158688522.82900155,
+          "hoop": 28839009.287925694,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.11797983801483848,
+          "utilisation": 0.34348193258865667,
+          "theta_deg": 180.0,
+          "axial": -172771412.0920943,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 63.58668730650154,
+      "L_over_r": 14.606714219636293,
+      "shear_gZ": 7508.172181372494,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 51,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 194.99999999999997,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 10.5,
+        "flange_bore_mm": 183.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.3691004426804478,
+        "root_band_extra_mass": 0.06085495877063514,
+        "fastener_mass": 0.27745585215347723,
+        "total_mass": 5.3289364209083505,
+        "bolt_tension": 6109.935330054705,
+        "bolt_shear": 86.18407009529894,
+        "utilisations": {
+          "bolt": 0.9825420074915544,
+          "flange": 0.9734029108598775,
+          "washer_bearing": 0.27043235526516163,
+          "thread_strip": 0.9114133919420031,
+          "bearing": 0.0038171005200343,
+          "pullthrough": 0.0932468097739833
+        },
+        "margins": {
+          "bolt": 0.017768189426339287,
+          "flange": 0.02732382330419303,
+          "washer_bearing": 2.697782386354954,
+          "thread_strip": 0.09719695677198703,
+          "bearing": 260.9789535935549,
+          "pullthrough": 9.724227482139652
+        },
+        "rigidity_indicator": 248.09503963642362
+      },
+      "objective_mass": 5.3289364209083505,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Titanium Ti-6Al-4V",
+      "diameter_mm": 190.0,
+      "nominal_t_mm": 1.4,
+      "minimum_t_mm": 1.33,
+      "shell_mass": 5.512068195666829,
+      "utilisation": 0.996688574336583,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.2964647832406776,
+        "Euler": 0.025698712655787926,
+        "shell_interaction": 0.793900727807071,
+        "ovalisation": 0.996688574336583
+      },
+      "margins": {
+        "strength": 2.373081919103271,
+        "Euler": 37.912455008705564,
+        "shell_interaction": 0.25960332945180786,
+        "ovalisation": 0.003322427635554348
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 6877.061074753275,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.095,
+        "ri": 0.09367,
+        "r": 0.094335,
+        "A": 0.0007883233003172025,
+        "I": 3.5078551844553196e-06
+      },
+      "pcr": 1751060.4753917505,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 341010909.52053666,
+      "sigma_bending_cr": 341010909.52053666,
+      "tau_cr": 69390808.5415502,
+      "classical_brazier": 19714.027464341227,
+      "ratios": {
+        "compression": 0.1673939962852408,
+        "bending": 0.5461558094077069,
+        "shear": 0.08035092211412331
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.08789136770194195,
+        "utilisation": 0.2964647832406776,
+        "theta_deg": 180.0,
+        "axial": -243328268.22755432,
+        "hoop": 32142857.14285714,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.08789136770194195,
+          "utilisation": 0.2964647832406776,
+          "theta_deg": 180.0,
+          "axial": -243328268.22755432,
+          "hoop": 32142857.14285714,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.07766979929828924,
+          "utilisation": 0.2786930198234058,
+          "theta_deg": 180.0,
+          "axial": -227593546.60476616,
+          "hoop": 32142857.14285714,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.07645744591764027,
+          "utilisation": 0.27650939571312994,
+          "theta_deg": 180.0,
+          "axial": -243328268.22755432,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 70.92857142857143,
+      "L_over_r": 15.90077913817777,
+      "shear_gZ": 9995.809102647749,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 35,
+        "bolt_d_mm": 5.0,
+        "hole_mm": 5.5,
+        "bolt_circle_mm": 175.0,
+        "flange_width_mm": 15.0,
+        "flange_t_mm": 9.5,
+        "flange_bore_mm": 160.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.6243035853597673,
+        "root_band_extra_mass": 0.0726759079881134,
+        "fastener_mass": 0.3223410329164477,
+        "total_mass": 6.531388721931157,
+        "bolt_tension": 9691.086577267473,
+        "bolt_shear": 125.58250213886417,
+        "utilisations": {
+          "bolt": 0.9973480658067442,
+          "flange": 0.9464517115708209,
+          "washer_bearing": 0.15450882371185926,
+          "thread_strip": 0.9251906594081096,
+          "bearing": 0.0028749914639972568,
+          "pullthrough": 0.07474993785614918
+        },
+        "margins": {
+          "bolt": 0.0026589856482157614,
+          "flange": 0.05657794029481478,
+          "washer_bearing": 5.472122277397452,
+          "thread_strip": 0.08085829642913778,
+          "bearing": 346.82711967069486,
+          "pullthrough": 12.377937543231504
+        },
+        "rigidity_indicator": 915.8151873298856
+      },
+      "objective_mass": 6.531388721931157,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Steel 4130",
+      "diameter_mm": 205.0,
+      "nominal_t_mm": 1.0,
+      "minimum_t_mm": 0.95,
+      "shell_mass": 7.546419713188016,
+      "utilisation": 0.9968776208738303,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.6969324161443108,
+        "Euler": 0.015788421915446257,
+        "shell_interaction": 0.8215646280667965,
+        "ovalisation": 0.9968776208738303
+      },
+      "margins": {
+        "strength": 0.43485935915044927,
+        "Euler": 62.337552375748956,
+        "shell_interaction": 0.21718969614487338,
+        "ovalisation": 0.003132158913782046
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 6792.203498028785,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.1025,
+        "ri": 0.10154999999999999,
+        "r": 0.10202499999999999,
+        "A": 0.0006089898819167481,
+        "I": 3.1695871819102153e-06
+      },
+      "pcr": 2850189.856908703,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 403045661.2567595,
+      "sigma_bending_cr": 403045661.2567595,
+      "tau_cr": 77397724.05394918,
+      "classical_brazier": 19467.07931074102,
+      "ratios": {
+        "compression": 0.1833361834495346,
+        "bending": 0.5449762827209133,
+        "shear": 0.09325216189634866
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.48571479267274675,
+        "utilisation": 0.6969324161443108,
+        "theta_deg": 180.0,
+        "axial": -293543179.5292095,
+        "hoop": 48552631.578947365,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.48571479267274675,
+          "utilisation": 0.6969324161443108,
+          "theta_deg": 180.0,
+          "axial": -293543179.5292095,
+          "hoop": 48552631.578947365,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.41651022908677404,
+          "utilisation": 0.6453760369635474,
+          "theta_deg": 180.0,
+          "axial": -269603839.9710517,
+          "hoop": 48552631.578947365,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.4072192733842992,
+          "utilisation": 0.6381373468026293,
+          "theta_deg": 180.0,
+          "axial": -293543179.5292095,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 107.39473684210526,
+      "L_over_r": 14.70227885322225,
+      "shear_gZ": 13024.95033019438,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 50,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 192.99999999999997,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 11.0,
+        "flange_bore_mm": 181.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 1.1458720442927093,
+        "root_band_extra_mass": 0.09987908443925414,
+        "fastener_mass": 0.27758244350909955,
+        "total_mass": 9.06975328542908,
+        "bolt_tension": 6213.9949009860775,
+        "bolt_shear": 87.90775149720491,
+        "utilisations": {
+          "bolt": 0.9992776260536458,
+          "flange": 0.9803570488539558,
+          "washer_bearing": 0.3007482320076532,
+          "thread_strip": 0.9269358617200494,
+          "bearing": 0.004063876823022209,
+          "pullthrough": 0.09898628576720588
+        },
+        "margins": {
+          "bolt": 0.0007228961476972717,
+          "flange": 0.020036527680406868,
+          "washer_bearing": 2.32504032799951,
+          "thread_strip": 0.07882329435865243,
+          "bearing": 245.0704503480309,
+          "pullthrough": 9.102409563601382
+        },
+        "rigidity_indicator": 1719.5806506156396
+      },
+      "objective_mass": 9.06975328542908,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Magnesium AZ31B",
+      "diameter_mm": 212.0,
+      "nominal_t_mm": 2.1,
+      "minimum_t_mm": 1.9950000000000003,
+      "shell_mass": 3.6765978714348817,
+      "utilisation": 0.9987913807188962,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.6762527339977651,
+        "Euler": 0.03141607251363714,
+        "shell_interaction": 0.813440409006566,
+        "ovalisation": 0.9987913807188962
+      },
+      "margins": {
+        "strength": 0.4787370900348993,
+        "Euler": 30.830840712693107,
+        "shell_interaction": 0.22934635276021575,
+        "ovalisation": 0.0012100818093103705
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 6926.8275153626955,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.106,
+        "ri": 0.104005,
+        "r": 0.1050025,
+        "A": 0.0013162015796081606,
+        "I": 7.256561529016756e-06
+      },
+      "pcr": 1432387.8320711898,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 184433423.97288933,
+      "sigma_bending_cr": 184433423.97288933,
+      "tau_cr": 42033077.09206137,
+      "classical_brazier": 19814.88440952933,
+      "ratios": {
+        "compression": 0.18537470681905074,
+        "bending": 0.5486175896310973,
+        "shear": 0.07944811255641793
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.4573177602394521,
+        "utilisation": 0.6762527339977651,
+        "theta_deg": 180.0,
+        "axial": -135372712.40402484,
+        "hoop": 23909774.436090223,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.4573177602394521,
+          "utilisation": 0.6762527339977651,
+          "theta_deg": 180.0,
+          "axial": -135372712.40402484,
+          "hoop": 23909774.436090223,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.38937457982239126,
+          "utilisation": 0.6239988620361349,
+          "theta_deg": 180.0,
+          "axial": -123754256.46142551,
+          "hoop": 23909774.436090223,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.37863163767815744,
+          "utilisation": 0.6153305109273857,
+          "theta_deg": 180.0,
+          "axial": -135372712.40402484,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 52.632832080200494,
+      "L_over_r": 14.285374157758149,
+      "shear_gZ": 5898.794658325641,
+      "connection": {
+        "bolt_material": "Titanium Ti-6Al-4V",
+        "bolts_per_end": 50,
+        "bolt_d_mm": 4.0,
+        "hole_mm": 4.500000000000001,
+        "bolt_circle_mm": 199.99999999999997,
+        "flange_width_mm": 12.0,
+        "flange_t_mm": 16.5,
+        "flange_bore_mm": 188.0,
+        "root_band_mm": 20.0,
+        "ring_extra_mass": 0.35951587137926405,
+        "root_band_extra_mass": 0.04828563505918096,
+        "fastener_mass": 0.33881836751287187,
+        "total_mass": 4.423217745386198,
+        "bolt_tension": 6153.151214860438,
+        "bolt_shear": 87.90775149720491,
+        "utilisations": {
+          "bolt": 0.989499202791249,
+          "flange": 0.954451946047329,
+          "washer_bearing": 0.6226800180813172,
+          "thread_strip": 0.9178598654362184,
+          "bearing": 0.005664797995727926,
+          "pullthrough": 0.13662985769385488
+        },
+        "margins": {
+          "bolt": 0.010612234127252984,
+          "flange": 0.04772168378020414,
+          "washer_bearing": 0.6059612818174738,
+          "thread_strip": 0.08949093173906664,
+          "bearing": 175.5288013366309,
+          "pullthrough": 6.319044437861376
+        },
+        "rigidity_indicator": 181.07326946329954
+      },
+      "objective_mass": 4.423217745386198,
+      "mass_scope": "barrel + integral flanges + modelled fasteners"
+    },
+    {
+      "material": "Carbon/Epoxy QI",
+      "diameter_mm": 105.0,
+      "nominal_t_mm": 3.0,
+      "minimum_t_mm": 2.85,
+      "shell_mass": 2.307185644796343,
+      "utilisation": 0.9906987718252418,
+      "governing": "ovalisation",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.6903944100166454,
+        "Euler": 0.1562337320595378,
+        "shell_interaction": 0.7168416755281312,
+        "ovalisation": 0.9906987718252418
+      },
+      "margins": {
+        "strength": 0.44844741714506364,
+        "Euler": 5.4006664042238866,
+        "shell_interaction": 0.3950081784283157,
+        "ovalisation": 0.009388553250774478
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 8185.908959295664,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.0525,
+        "ri": 0.04965,
+        "r": 0.051074999999999995,
+        "A": 0.0009146040152579615,
+        "I": 1.1938720634143758e-06
+      },
+      "pcr": 288029.9881900749,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 600000000.0,
+      "sigma_bending_cr": 600000000.0,
+      "tau_cr": 137756550.101131,
+      "classical_brazier": 23607.893718474297,
+      "ratios": {
+        "compression": 0.08200270144106732,
+        "bending": 0.5999529228365608,
+        "shear": 0.03488605125050308
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.4766444413822319,
+        "utilisation": 0.6903944100166454,
+        "theta_deg": 180.0,
+        "axial": -409173374.5665769,
+        "hoop": 8289473.684210526,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.4766444413822319,
+          "utilisation": 0.6903944100166454,
+          "theta_deg": 180.0,
+          "axial": -409173374.5665769,
+          "hoop": 8289473.684210526,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.46791779488218355,
+          "utilisation": 0.6840451702060205,
+          "theta_deg": 180.0,
+          "axial": -405362998.9579518,
+          "hoop": 8289473.684210526,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.4650634734838895,
+          "utilisation": 0.6819556242776281,
+          "theta_deg": 180.0,
+          "axial": -409173374.5665769,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 17.921052631578945,
+      "L_over_r": 29.368575624082236,
+      "shear_gZ": 8644.695809822237,
+      "connection": null,
+      "objective_mass": 2.307185644796343,
+      "mass_scope": "shell only; interface unresolved"
+    },
+    {
+      "material": "Glass/Epoxy QI",
+      "diameter_mm": 104.0,
+      "nominal_t_mm": 5.0,
+      "minimum_t_mm": 4.75,
+      "shell_mass": 4.432001836051799,
+      "utilisation": 0.9891703953310269,
+      "governing": "shell_interaction",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.9694960141357968,
+        "Euler": 0.22450014796282966,
+        "shell_interaction": 0.9891703953310269,
+        "ovalisation": 0.8928124682680543
+      },
+      "margins": {
+        "strength": 0.03146375582719063,
+        "Euler": 3.454340048655867,
+        "shell_interaction": 0.010948169011213649,
+        "ovalisation": 0.12005604260867497
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 9050.081602990438,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.052,
+        "ri": 0.04725,
+        "r": 0.049625,
+        "A": 0.001481064586626737,
+        "I": 1.8278419746048877e-06
+      },
+      "pcr": 200445.302189514,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 300000000.0,
+      "sigma_bending_cr": 300000000.0,
+      "tau_cr": 100000000.0,
+      "classical_brazier": 28961.71024437441,
+      "ratios": {
+        "compression": 0.10127850017779375,
+        "bending": 0.8582146777344362,
+        "shear": 0.02967721741879703
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.939922521425197,
+        "utilisation": 0.9694960141357968,
+        "theta_deg": 180.0,
+        "axial": -287847953.37366897,
+        "hoop": 4926315.7894736845,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.939922521425197,
+          "utilisation": 0.9694960141357968,
+          "theta_deg": 180.0,
+          "axial": -287847953.37366897,
+          "hoop": 4926315.7894736845,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.9262015363766091,
+          "utilisation": 0.9623936493850159,
+          "theta_deg": 180.0,
+          "axial": -285716911.34794974,
+          "hoop": 4926315.7894736845,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.92062715846011,
+          "utilisation": 0.9594931779122299,
+          "theta_deg": 180.0,
+          "axial": -287847953.37366897,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 10.447368421052632,
+      "L_over_r": 30.226700251889167,
+      "shear_gZ": 5338.371850720452,
+      "connection": null,
+      "objective_mass": 4.432001836051799,
+      "mass_scope": "shell only; interface unresolved"
+    },
+    {
+      "material": "Aramid/Epoxy QI",
+      "diameter_mm": 150.0,
+      "nominal_t_mm": 3.0,
+      "minimum_t_mm": 2.85,
+      "shell_mass": 2.90942895648951,
+      "utilisation": 0.998327077872412,
+      "governing": "shell_interaction",
+      "passes": true,
+      "validity": true,
+      "utilisations": {
+        "strength": 0.9686274990215984,
+        "Euler": 0.08216347814200856,
+        "shell_interaction": 0.998327077872412,
+        "ovalisation": 0.9626641838414774
+      },
+      "margins": {
+        "strength": 0.03238861276403027,
+        "Euler": 11.170857692655538,
+        "shell_interaction": 0.0016757254858330572,
+        "ovalisation": 0.03878384257481704
+      },
+      "applied": {
+        "P": 45000.0,
+        "V": 2197.693787430123,
+        "p": 450000.0,
+        "M": 7396.456020815222,
+        "first_order_M": 6593.081362290369
+      },
+      "section": {
+        "ro": 0.075,
+        "ri": 0.07214999999999999,
+        "r": 0.073575,
+        "A": 0.0013175132730808563,
+        "I": 3.5673722248695432e-06
+      },
+      "pcr": 547688.5961694992,
+      "gx": 0.35,
+      "gb": 0.35,
+      "sigma_axial_cr": 200000000.0,
+      "sigma_bending_cr": 200000000.0,
+      "tau_cr": 66669345.44455574,
+      "classical_brazier": 21952.34001925165,
+      "ratios": {
+        "compression": 0.17077626813873598,
+        "bending": 0.77751096128107,
+        "shear": 0.05003984845260612
+      },
+      "strength_state": {
+        "case": "wall_only",
+        "index": 0.9382392318608366,
+        "utilisation": 0.9686274990215984,
+        "theta_deg": 180.0,
+        "axial": -189657445.8839612,
+        "hoop": 11842105.263157895,
+        "shear": 0.0
+      },
+      "strength_states": [
+        {
+          "case": "wall_only",
+          "index": 0.9382392318608366,
+          "utilisation": 0.9686274990215984,
+          "theta_deg": 180.0,
+          "axial": -189657445.8839612,
+          "hoop": 11842105.263157895,
+          "shear": 0.0
+        },
+        {
+          "case": "closed_end",
+          "index": 0.8849480159915829,
+          "utilisation": 0.9407167565168503,
+          "theta_deg": 180.0,
+          "axial": -184071714.35329968,
+          "hoop": 11842105.263157895,
+          "shear": 0.0
+        },
+        {
+          "case": "unpressurised",
+          "index": 0.8992486694806918,
+          "utilisation": 0.948287229419806,
+          "theta_deg": 180.0,
+          "axial": -189657445.8839612,
+          "hoop": 0.0,
+          "shear": 0.0
+        }
+      ],
+      "r_over_t": 25.81578947368421,
+      "L_over_r": 20.387359836901123,
+      "shear_gZ": 5916.0453058138855,
+      "connection": null,
+      "objective_mass": 2.90942895648951,
+      "mass_scope": "shell only; interface unresolved"
+    }
+  ],
+  "transfer_selected": {
+    "material": "Magnesium AZ31B",
+    "diameter_mm": 212.0,
+    "nominal_t_mm": 2.1,
+    "minimum_t_mm": 1.9950000000000003,
+    "shell_mass": 3.6765978714348817,
+    "utilisation": 0.9987913807188962,
+    "governing": "ovalisation",
+    "passes": true,
+    "validity": true,
+    "utilisations": {
+      "strength": 0.6762527339977651,
+      "Euler": 0.03141607251363714,
+      "shell_interaction": 0.813440409006566,
+      "ovalisation": 0.9987913807188962
+    },
+    "margins": {
+      "strength": 0.4787370900348993,
+      "Euler": 30.830840712693107,
+      "shell_interaction": 0.22934635276021575,
+      "ovalisation": 0.0012100818093103705
+    },
+    "applied": {
+      "P": 45000.0,
+      "V": 2197.693787430123,
+      "p": 450000.0,
+      "M": 6926.8275153626955,
+      "first_order_M": 6593.081362290369
+    },
+    "section": {
+      "ro": 0.106,
+      "ri": 0.104005,
+      "r": 0.1050025,
+      "A": 0.0013162015796081606,
+      "I": 7.256561529016756e-06
+    },
+    "pcr": 1432387.8320711898,
+    "gx": 0.35,
+    "gb": 0.35,
+    "sigma_axial_cr": 184433423.97288933,
+    "sigma_bending_cr": 184433423.97288933,
+    "tau_cr": 42033077.09206137,
+    "classical_brazier": 19814.88440952933,
+    "ratios": {
+      "compression": 0.18537470681905074,
+      "bending": 0.5486175896310973,
+      "shear": 0.07944811255641793
+    },
+    "strength_state": {
+      "case": "wall_only",
+      "index": 0.4573177602394521,
+      "utilisation": 0.6762527339977651,
+      "theta_deg": 180.0,
+      "axial": -135372712.40402484,
+      "hoop": 23909774.436090223,
+      "shear": 0.0
+    },
+    "strength_states": [
+      {
+        "case": "wall_only",
+        "index": 0.4573177602394521,
+        "utilisation": 0.6762527339977651,
+        "theta_deg": 180.0,
+        "axial": -135372712.40402484,
+        "hoop": 23909774.436090223,
+        "shear": 0.0
+      },
+      {
+        "case": "closed_end",
+        "index": 0.38937457982239126,
+        "utilisation": 0.6239988620361349,
+        "theta_deg": 180.0,
+        "axial": -123754256.46142551,
+        "hoop": 23909774.436090223,
+        "shear": 0.0
+      },
+      {
+        "case": "unpressurised",
+        "index": 0.37863163767815744,
+        "utilisation": 0.6153305109273857,
+        "theta_deg": 180.0,
+        "axial": -135372712.40402484,
+        "hoop": 0.0,
+        "shear": 0.0
+      }
+    ],
+    "r_over_t": 52.632832080200494,
+    "L_over_r": 14.285374157758149,
+    "shear_gZ": 5898.794658325641,
+    "connection": {
+      "bolt_material": "Titanium Ti-6Al-4V",
+      "bolts_per_end": 50,
+      "bolt_d_mm": 4.0,
+      "hole_mm": 4.500000000000001,
+      "bolt_circle_mm": 199.99999999999997,
+      "flange_width_mm": 12.0,
+      "flange_t_mm": 16.5,
+      "flange_bore_mm": 188.0,
+      "root_band_mm": 20.0,
+      "ring_extra_mass": 0.35951587137926405,
+      "root_band_extra_mass": 0.04828563505918096,
+      "fastener_mass": 0.33881836751287187,
+      "total_mass": 4.423217745386198,
+      "bolt_tension": 6153.151214860438,
+      "bolt_shear": 87.90775149720491,
+      "utilisations": {
+        "bolt": 0.989499202791249,
+        "flange": 0.954451946047329,
+        "washer_bearing": 0.6226800180813172,
+        "thread_strip": 0.9178598654362184,
+        "bearing": 0.005664797995727926,
+        "pullthrough": 0.13662985769385488
+      },
+      "margins": {
+        "bolt": 0.010612234127252984,
+        "flange": 0.04772168378020414,
+        "washer_bearing": 0.6059612818174738,
+        "thread_strip": 0.08949093173906664,
+        "bearing": 175.5288013366309,
+        "pullthrough": 6.319044437861376
+      },
+      "rigidity_indicator": 181.07326946329954
+    },
+    "objective_mass": 4.423217745386198,
+    "mass_scope": "barrel + integral flanges + modelled fasteners"
+  },
+  "sensitivities": [
+    {
+      "load_factor": 1.25,
+      "kdf_cap": 0.2,
+      "total_mass": 3.1640447575777775,
+      "diameter_mm": 146,
+      "nominal_t_mm": 2.2500000000000004,
+      "original_shell_utilisation": 1.4212582518188226
+    },
+    {
+      "load_factor": 1.25,
+      "kdf_cap": 0.35,
+      "total_mass": 2.5707373555074566,
+      "diameter_mm": 150,
+      "nominal_t_mm": 1.7000000000000002,
+      "original_shell_utilisation": 0.8121475724678988
+    },
+    {
+      "load_factor": 1.25,
+      "kdf_cap": 0.5,
+      "total_mass": 2.2674671055716535,
+      "diameter_mm": 164,
+      "nominal_t_mm": 1.35,
+      "original_shell_utilisation": 0.7351763227728919
+    },
+    {
+      "load_factor": 1.5,
+      "kdf_cap": 0.2,
+      "total_mass": 3.564135217795111,
+      "diameter_mm": 154,
+      "nominal_t_mm": 2.4000000000000004,
+      "original_shell_utilisation": 1.7391761685723557
+    },
+    {
+      "load_factor": 1.5,
+      "kdf_cap": 0.35,
+      "total_mass": 2.877525478398541,
+      "diameter_mm": 158,
+      "nominal_t_mm": 1.8000000000000003,
+      "original_shell_utilisation": 0.9938149534699178
+    },
+    {
+      "load_factor": 1.5,
+      "kdf_cap": 0.5,
+      "total_mass": 2.570230910178575,
+      "diameter_mm": 174,
+      "nominal_t_mm": 1.4500000000000002,
+      "original_shell_utilisation": 0.8924286798447714
+    },
+    {
+      "load_factor": 2.0,
+      "kdf_cap": 0.2,
+      "total_mass": 4.355200973665496,
+      "diameter_mm": 178,
+      "nominal_t_mm": 2.5500000000000003,
+      "original_shell_utilisation": 2.413315245313814
+    },
+    {
+      "load_factor": 2.0,
+      "kdf_cap": 0.35,
+      "total_mass": 3.508841255452259,
+      "diameter_mm": 178,
+      "nominal_t_mm": 1.9500000000000002,
+      "original_shell_utilisation": 1.3790372830364654
+    },
+    {
+      "load_factor": 2.0,
+      "kdf_cap": 0.5,
+      "total_mass": 3.19489853649348,
+      "diameter_mm": 190,
+      "nominal_t_mm": 1.65,
+      "original_shell_utilisation": 1.218557723675335
+    }
+  ]
+}
