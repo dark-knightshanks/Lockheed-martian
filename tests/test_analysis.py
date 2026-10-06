@@ -65,13 +65,15 @@ class MechanicsTests(unittest.TestCase):
             self.assertGreaterEqual(best['index']+1e-12,dense)
             self.assertAlmostEqual(best['index'],dense,places=5)
 
-    def test_nominal_service_basis_has_no_added_allowances(self):
+    def test_team_factor_applies_once_without_extra_allowances(self):
         b=model.Basis();x=model.shell_check(model.MATERIALS[0],.180,.002,b)
-        self.assertEqual(b.load_multiplier,1)
-        self.assertIsNone(b.required_safety_factor)
+        self.assertEqual(b.load_multiplier,1.1)
+        self.assertEqual(b.required_safety_factor,1.1)
         self.assertEqual(x['minimum_t_mm'],2)
-        self.assertEqual(x['applied']['P'],model.LOADS['F'])
-        self.assertEqual(x['applied']['p'],model.LOADS['p'])
+        self.assertEqual(x['applied']['P'],1.1*model.LOADS['F'])
+        self.assertEqual(x['applied']['V'],1.1*model.LOADS['V'])
+        self.assertEqual(x['applied']['first_order_M'],1.1*model.LOADS['M'])
+        self.assertEqual(x['applied']['p'],1.1*model.LOADS['p'])
         phi=math.sqrt(x['r_over_t'])/16
         self.assertAlmostEqual(x['gx'],1-.901*(1-math.exp(-phi)))
         self.assertAlmostEqual(x['gb'],1-.731*(1-math.exp(-phi)))
@@ -94,7 +96,7 @@ class MechanicsTests(unittest.TestCase):
 class GeneratedResultsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data=json.loads((Path(__file__).parents[1]/'results/design.json').read_text())
+        cls.data=json.loads((Path(__file__).parents[1]/'data/original/design.json').read_text())
 
     def test_all_candidates_recompute_and_total_mass_is_unresolved(self):
         for group,bkey in [('winners','basis'),('transfer_winners','transfer_basis')]:
@@ -116,7 +118,7 @@ class GeneratedResultsTests(unittest.TestCase):
         names={m.name for m in model.MATERIALS}
         self.assertEqual({r['material'] for r in self.data['winners']},names)
         self.assertEqual({r['material'] for r in self.data['transfer_winners']},names)
-        for f in [1,1.25,1.5,2]:
+        for f in [1,1.1,1.25,1.5,2]:
             self.assertEqual({r['material'] for r in self.data['sensitivities'] if r['load_multiplier']==f},names)
 
     def test_grid_is_numerical_not_an_invented_ply_schedule(self):
@@ -124,8 +126,10 @@ class GeneratedResultsTests(unittest.TestCase):
             step=self.data['basis']['thickness_step_mm']
             self.assertAlmostEqual(row['nominal_t_mm']/step,round(row['nominal_t_mm']/step))
 
-    def test_missing_safety_factor_is_not_a_passing_claim(self):
-        self.assertIsNone(self.data['required_safety_factor'])
+    def test_team_factor_is_not_full_structural_verification(self):
+        self.assertEqual(self.data['required_safety_factor'],1.1)
+        self.assertEqual(self.data['selected']['structural_verification'],'incomplete')
+        self.assertIn('transverse_shear_surrogate',self.data['selected']['assumption_flags'])
         self.assertIsNone(self.data['assembly_mass'])
         self.assertIn('unresolved',self.data['status'])
 

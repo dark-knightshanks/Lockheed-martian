@@ -1,0 +1,21 @@
+{
+  "input_sha256": "6453cdbe51a6c78bf26748e60da0e03a5088e70913aead14630be47dfab7252c",
+  "independent_units": "N, mm, MPa",
+  "verified_cases": 30,
+  "angular_samples_per_case": 12001,
+  "maximum_utilisation_absolute_difference": 4.083359095297112e-09,
+  "maximum_fourier_relative_difference": 1.7914558725351526e-12,
+  "checks_passed": true,
+  "sweep_checks": [
+    {
+      "case": "primary",
+      "feasible_diameter_material_pairs": 1194,
+      "max_nominal_grid_mass_excess": 0.007239006722746133
+    },
+    {
+      "case": "transfer",
+      "feasible_diameter_material_pairs": 1033,
+      "max_nominal_grid_mass_excess": 0.009680004135648845
+    }
+  ]
+}
