@@ -83,6 +83,7 @@ def pdf(markdown,path,title):
         s=re.sub(r'\$([^$]+)\$',capture,s)
         s=html.escape(s)
         s=re.sub(r'\*\*(.+?)\*\*',r'<b>\1</b>',s)
+        s=re.sub(r'(?<!\*)\*([^*]+)\*(?!\*)',r'<i>\1</i>',s)
         s=re.sub(r'`([^`]+)`',r'<font name="Courier">\1</font>',s)
         s=re.sub(r'\[([^]]+)\]\(([^)]+)\)',r'\1',s)
         for n,expression in enumerate(expressions):s=s.replace(f'MATHPLACEHOLDER{n}TOKEN',expression)
@@ -174,7 +175,8 @@ The result covers the uniform shell with ideal simply supported rigid end rings.
 
 <!-- PAGE -->
 '''
-    report+=(ROOT/'docs/METHOD.md').read_text().replace('# Analytical Method Specification','# Governing Equations and Applicability',1)
+    method,references=(ROOT/'docs/METHOD.md').read_text().split('## 9. Sources and equation provenance',1)
+    report+=method.replace('# Analytical Method Specification','# Governing Equations and Applicability',1)
     report+='\n<!-- PAGE -->\n# Numerical Evaluation and Verification\n\n'
     report+='## Selected geometry under both load cases\n\n'
     quantities=[
@@ -235,6 +237,8 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 
 The report is generated from the numerical dataset. A SHA-256 check prevents report generation from using a verification record for different solution data.
 '''
+    references=references.strip().replace('4. The pressure-supported','\nDerivation note: The pressure-supported')
+    report+='\n## References\n\n'+references+'\n'
     report=report.replace('moment M + V L','moment $M+VL$')
     report=report.replace('U is demand/capacity and MS = 1/U - 1.',r'$U$ is demand/capacity and $\mathrm{MS}=1/U-1$.')
     OUT.mkdir(exist_ok=True)
