@@ -36,9 +36,9 @@ The moment and shear envelopes include beam-column amplification. Global Euler a
 
 The objective is shell mass within the defined family. Rigid end rings specify kinematic boundary conditions. Their sections, finite stiffness, attachment details and masses are not supplied.
 
-```
-m_assembly = m_shell + m_end_rings + m_connections + m_other_interfaces
-```
+$$
+m_{\mathrm{assembly}}=m_{\mathrm{shell}}+m_{\mathrm{end\ rings}}+m_{\mathrm{connections}}+m_{\mathrm{other\ interfaces}}
+$$
 
 The missing interface terms are excluded from the numerical objective. They are not assumed to be physically zero. Stiffened, sandwich and hybrid configurations would add design variables and failure constraints; their global optimum is not established by the current homogeneous-shell search.
 
