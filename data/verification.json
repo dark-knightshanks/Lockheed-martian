@@ -1,0 +1,11 @@
+{
+  "input_sha256": "57b0a902aebf6b2005b7ebc7c488c7fe1a95c2817d87bafa116ef8fb584f0c24",
+  "independent_units": "N, mm, MPa",
+  "verified_cases": 22,
+  "angular_samples_per_case": 12001,
+  "maximum_utilisation_absolute_difference": 3.447700680503374e-09,
+  "maximum_fourier_relative_difference": 1.1550760348200129e-12,
+  "checks_passed": true,
+  "feasible_diameter_material_pairs": 1033,
+  "maximum_nominal_grid_mass_excess": 0.009680004135648845
+}

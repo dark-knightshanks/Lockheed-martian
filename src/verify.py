@@ -1,17 +1,17 @@
-"""Independent N/mm/MPa verification of Revision C saved outputs.
+"""Independent N/mm/MPa verification of the saved solution.
 
-No import of either design engine. Uses dense angular scanning rather than
+No import of the design engine. Uses dense angular scanning rather than
 analytic angular maximisation and a Fourier beam-column solution.
 """
 from pathlib import Path
 import json,math,csv,hashlib
 ROOT=Path(__file__).resolve().parents[1]
 
-def calculate(properties,D,t,case,quality='B',gust=20.,pressure_path='wall_only'):
+def calculate(properties,D,t,case,gust=20.,pressure_path='wall_only'):
     E=properties['E']/1e6;nu=properties['nu'];density=properties['density']
     sy=properties['yield_stress']/1e6;xc=properties['Xc']/1e6;yt=properties['Yt']/1e6;S=properties['S']/1e6
     L=1500.;di=D-2*t;r=(D+di)/4;A=math.pi*t*(D-t);I=A*(D*D+di*di)/16
-    k=(.4 if sy else .5) if quality=='B' else (.5 if sy else .65)
+    k=.4 if sy else .5
     q=24500.;f=q*2*math.atan(gust/200)*.1;V=1.1*f*3;P=33000.;p=.33
     first=1.1*f*4.5*1000*(2 if case=='transfer' else 1)
     pcr=math.pi**2*E*I/L**2;lam=math.sqrt(P/(E*I));M=first/math.cos(lam*L/2)
@@ -33,24 +33,27 @@ def calculate(properties,D,t,case,quality='B',gust=20.,pressure_path='wall_only'
 
 
 def main():
-    d=json.loads((ROOT/'data/guild_assay/response.json').read_text());props={m['name']:m for m in d['materials']}
-    errors=[];fourier=[];count=0;minima=[]
-    for case,c in d['cases'].items():
-        for row in c['winners']+c['fine_winners']+[c['degraded_original']]:
-            actual=calculate(props[row['material']],row['diameter_mm'],row['nominal_t_mm'],case)
-            assert math.isclose(actual['mass'],row['shell_mass'],rel_tol=1e-10)
-            for key in ['strength','Euler','local_shell','ovalisation']:
-                error=abs(actual[key]-row['utilisations'][key]);errors.append(error)
-                assert error < 2e-7,(case,row['material'],key,error)
-            fourier.append(actual['fourier_relative_error']);count+=1
-        with (ROOT/f'data/guild_assay/{case}_trade_study.csv').open() as f:rows=list(csv.DictReader(f))
-        for row in c['winners']:
-            assert min(float(x['shell_mass']) for x in rows if x['material']==row['material'])==row['shell_mass']
-        gaps=[coarse['shell_mass']/fine['shell_mass']-1 for coarse,fine in zip(c['winners'],c['fine_winners'])]
-        minima.append(dict(case=case,feasible_diameter_material_pairs=len(rows),max_nominal_grid_mass_excess=max(gaps)))
-    out=dict(input_sha256=hashlib.sha256((ROOT/'data/guild_assay/response.json').read_bytes()).hexdigest(),independent_units='N, mm, MPa',verified_cases=count,angular_samples_per_case=12001,
+    source=ROOT/'data/solution.json'
+    d=json.loads(source.read_text());props={m['name']:m for m in d['materials']}
+    records=[('transfer',r) for r in d['search']['material_minima']+d['search']['refined_minima']]
+    records+=list(d['load_cases'].items())
+    records += [(r['case'],r['result']) for r in d['sensitivities']]
+    errors=[];fourier=[]
+    for case,row in records:
+        actual=calculate(props[row['material']],row['diameter_mm'],row['nominal_t_mm'],case,gust=row['basis']['gust_velocity'])
+        assert math.isclose(actual['mass'],row['shell_mass'],rel_tol=1e-10)
+        for key in ['strength','Euler','local_shell','ovalisation']:
+            error=abs(actual[key]-row['utilisations'][key]);errors.append(error)
+            assert error < 2e-7,(case,row['material'],key,error)
+        fourier.append(actual['fourier_relative_error'])
+    with (ROOT/'data/trade_study.csv').open() as f:rows=list(csv.DictReader(f))
+    for row in d['search']['material_minima']:
+        assert min(float(x['shell_mass']) for x in rows if x['material']==row['material'])==row['shell_mass']
+    gaps=[c['shell_mass']/f['shell_mass']-1 for c,f in zip(d['search']['material_minima'],d['search']['refined_minima'])]
+    out=dict(input_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),independent_units='N, mm, MPa',
+        verified_cases=len(records),angular_samples_per_case=12001,
         maximum_utilisation_absolute_difference=max(errors),maximum_fourier_relative_difference=max(fourier),
-        checks_passed=True,sweep_checks=minima)
-    (ROOT/'data/guild_assay/verification.json').write_text(json.dumps(out,indent=2)+'\n')
+        checks_passed=True,feasible_diameter_material_pairs=len(rows),maximum_nominal_grid_mass_excess=max(gaps))
+    (ROOT/'data/verification.json').write_text(json.dumps(out,indent=2)+'\n')
     print(json.dumps(out,indent=2))
 if __name__=='__main__':main()

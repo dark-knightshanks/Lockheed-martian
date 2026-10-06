@@ -1,0 +1,1831 @@
+{
+  "materials": [
+    {
+      "name": "Aluminium 7075-T6",
+      "E": 71700000000.0,
+      "nu": 0.33,
+      "density": 2810,
+      "yield_stress": 402000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0,
+      "knockdown": 0.4
+    },
+    {
+      "name": "Titanium Ti-6Al-4V",
+      "E": 113800000000.0,
+      "nu": 0.31,
+      "density": 4430,
+      "yield_stress": 704000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0,
+      "knockdown": 0.4
+    },
+    {
+      "name": "Steel 4130",
+      "E": 205000000000.0,
+      "nu": 0.29,
+      "density": 7850,
+      "yield_stress": 368000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0,
+      "knockdown": 0.4
+    },
+    {
+      "name": "Magnesium AZ31B",
+      "E": 45000000000.0,
+      "nu": 0.35,
+      "density": 1770,
+      "yield_stress": 176000000.0,
+      "Xc": 0.0,
+      "Yt": 0.0,
+      "S": 0.0,
+      "knockdown": 0.4
+    },
+    {
+      "name": "Carbon/Epoxy QI",
+      "E": 52300000000.0,
+      "nu": 0.3,
+      "density": 1600,
+      "yield_stress": 0.0,
+      "Xc": 480000000.0,
+      "Yt": 400000000.0,
+      "S": 160000000.0,
+      "knockdown": 0.5
+    },
+    {
+      "name": "Glass/Epoxy QI",
+      "E": 23800000000.0,
+      "nu": 0.3,
+      "density": 1900,
+      "yield_stress": 0.0,
+      "Xc": 240000000.0,
+      "Yt": 200000000.0,
+      "S": 80000000.0,
+      "knockdown": 0.5
+    },
+    {
+      "name": "Aramid/Epoxy QI",
+      "E": 33300000000.0,
+      "nu": 0.34,
+      "density": 1400,
+      "yield_stress": 0.0,
+      "Xc": 160000000.0,
+      "Yt": 240000000.0,
+      "S": 64000000.0,
+      "knockdown": 0.5
+    }
+  ],
+  "selected": {
+    "material": "Carbon/Epoxy QI",
+    "case": "transfer",
+    "diameter_mm": 122.0,
+    "nominal_t_mm": 1.52,
+    "shell_mass": 1.3807646544356094,
+    "passes": true,
+    "applicability": {
+      "thin_shell": true,
+      "elastic_capacity": true
+    },
+    "utilisation": 0.9910143276733662,
+    "governing": "local_shell",
+    "utilisations": {
+      "strength": 0.8631832241636627,
+      "Euler": 0.13777726297631593,
+      "local_shell": 0.9910143276733662,
+      "ovalisation": 0.7690327707042995
+    },
+    "margins": {
+      "strength": 0.1585025890289966,
+      "Euler": 6.258091635714241,
+      "local_shell": 0.009067146736142284,
+      "ovalisation": 0.30033470366181514
+    },
+    "section": {
+      "ro": 0.061,
+      "ri": 0.05948,
+      "r": 0.06024,
+      "A": 0.0005753186060148373,
+      "I": 1.0440407999425916e-06
+    },
+    "knockdown": 0.5,
+    "critical_axial_stress": 399345683.4083592,
+    "normal_allowable": 400000000.0,
+    "effective_compression": 395757293.95219606,
+    "critical_angle_deg": 180.0,
+    "compression_terms": {
+      "axial": 57359521.58506923,
+      "bending": 338397772.3671268,
+      "peak_shear": 14220502.544444053,
+      "hoop_lower": 12913421.052631577
+    },
+    "applied": {
+      "P": 33000.0,
+      "V": 1611.6421107820902,
+      "secondary_shear": 2479.01773956791,
+      "total_shear": 4090.6598503500004,
+      "p": 330000.0,
+      "first_order_M": 4834.926332346271,
+      "M": 5791.8209993601
+    },
+    "pcr": 239517.02397856995,
+    "brazier_moment": 7531.305842865195,
+    "strength_state": {
+      "utilisation": 0.8631832241636627,
+      "index": 0.7450852784775759,
+      "theta_deg": 172.814678235649,
+      "axial": -393099780.80657566,
+      "hoop": 13243421.052631577,
+      "shear": 1778687.1762748435,
+      "criterion": "PSD quadratic envelope",
+      "case": "wall_only"
+    },
+    "pressure_path": "wall_only",
+    "basis": {
+      "length": 1.5,
+      "load_factor": 1.1,
+      "gust_velocity": 20.0
+    },
+    "mass_scope": "uniform shell",
+    "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+  },
+  "load_cases": {
+    "primary": {
+      "material": "Carbon/Epoxy QI",
+      "case": "primary",
+      "diameter_mm": 122.0,
+      "nominal_t_mm": 1.52,
+      "shell_mass": 1.3807646544356094,
+      "passes": true,
+      "applicability": {
+        "thin_shell": true,
+        "elastic_capacity": true
+      },
+      "utilisation": 0.5673240432574318,
+      "governing": "local_shell",
+      "utilisations": {
+        "strength": 0.5105070836478165,
+        "Euler": 0.13777726297631593,
+        "local_shell": 0.5673240432574318,
+        "ovalisation": 0.38451638535214977
+      },
+      "margins": {
+        "strength": 0.9588366783366125,
+        "Euler": 6.258091635714241,
+        "local_shell": 0.7626610609665894,
+        "ovalisation": 1.6006694073236303
+      },
+      "section": {
+        "ro": 0.061,
+        "ri": 0.05948,
+        "r": 0.06024,
+        "A": 0.0005753186060148373,
+        "I": 1.0440407999425916e-06
+      },
+      "knockdown": 0.5,
+      "critical_axial_stress": 399345683.4083592,
+      "normal_allowable": 400000000.0,
+      "effective_compression": 226558407.76863265,
+      "critical_angle_deg": 180.0,
+      "compression_terms": {
+        "axial": 57359521.58506923,
+        "bending": 169198886.1835634,
+        "peak_shear": 9911554.921943597,
+        "hoop_lower": 12913421.052631577
+      },
+      "applied": {
+        "P": 33000.0,
+        "V": 1611.6421107820902,
+        "secondary_shear": 1239.508869783955,
+        "total_shear": 2851.1509805660453,
+        "p": 330000.0,
+        "first_order_M": 2417.4631661731355,
+        "M": 2895.91049968005
+      },
+      "pcr": 239517.02397856995,
+      "brazier_moment": 7531.305842865195,
+      "strength_state": {
+        "utilisation": 0.5105070836478165,
+        "index": 0.2606174824545987,
+        "theta_deg": 170.03273481970137,
+        "axial": -224004655.6061893,
+        "hoop": 13243421.052631577,
+        "shear": 1715546.427201575,
+        "criterion": "PSD quadratic envelope",
+        "case": "wall_only"
+      },
+      "pressure_path": "wall_only",
+      "basis": {
+        "length": 1.5,
+        "load_factor": 1.1,
+        "gust_velocity": 20.0
+      },
+      "mass_scope": "uniform shell",
+      "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+    },
+    "transfer": {
+      "material": "Carbon/Epoxy QI",
+      "case": "transfer",
+      "diameter_mm": 122.0,
+      "nominal_t_mm": 1.52,
+      "shell_mass": 1.3807646544356094,
+      "passes": true,
+      "applicability": {
+        "thin_shell": true,
+        "elastic_capacity": true
+      },
+      "utilisation": 0.9910143276733662,
+      "governing": "local_shell",
+      "utilisations": {
+        "strength": 0.8631832241636627,
+        "Euler": 0.13777726297631593,
+        "local_shell": 0.9910143276733662,
+        "ovalisation": 0.7690327707042995
+      },
+      "margins": {
+        "strength": 0.1585025890289966,
+        "Euler": 6.258091635714241,
+        "local_shell": 0.009067146736142284,
+        "ovalisation": 0.30033470366181514
+      },
+      "section": {
+        "ro": 0.061,
+        "ri": 0.05948,
+        "r": 0.06024,
+        "A": 0.0005753186060148373,
+        "I": 1.0440407999425916e-06
+      },
+      "knockdown": 0.5,
+      "critical_axial_stress": 399345683.4083592,
+      "normal_allowable": 400000000.0,
+      "effective_compression": 395757293.95219606,
+      "critical_angle_deg": 180.0,
+      "compression_terms": {
+        "axial": 57359521.58506923,
+        "bending": 338397772.3671268,
+        "peak_shear": 14220502.544444053,
+        "hoop_lower": 12913421.052631577
+      },
+      "applied": {
+        "P": 33000.0,
+        "V": 1611.6421107820902,
+        "secondary_shear": 2479.01773956791,
+        "total_shear": 4090.6598503500004,
+        "p": 330000.0,
+        "first_order_M": 4834.926332346271,
+        "M": 5791.8209993601
+      },
+      "pcr": 239517.02397856995,
+      "brazier_moment": 7531.305842865195,
+      "strength_state": {
+        "utilisation": 0.8631832241636627,
+        "index": 0.7450852784775759,
+        "theta_deg": 172.814678235649,
+        "axial": -393099780.80657566,
+        "hoop": 13243421.052631577,
+        "shear": 1778687.1762748435,
+        "criterion": "PSD quadratic envelope",
+        "case": "wall_only"
+      },
+      "pressure_path": "wall_only",
+      "basis": {
+        "length": 1.5,
+        "load_factor": 1.1,
+        "gust_velocity": 20.0
+      },
+      "mass_scope": "uniform shell",
+      "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+    }
+  },
+  "search": {
+    "material_minima": [
+      {
+        "material": "Aluminium 7075-T6",
+        "case": "transfer",
+        "diameter_mm": 125.0,
+        "nominal_t_mm": 1.4000000000000001,
+        "shell_mass": 2.291363327555801,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9945499723376199,
+        "governing": "strength",
+        "utilisations": {
+          "strength": 0.9945499723376199,
+          "Euler": 0.10105981708686819,
+          "local_shell": 0.9870890958284453,
+          "ovalisation": 0.6065006301384855
+        },
+        "margins": {
+          "strength": 0.005479893232081867,
+          "Euler": 8.895129724412898,
+          "local_shell": 0.013079775904847546,
+          "ovalisation": 0.6488029035875273
+        },
+        "section": {
+          "ro": 0.0625,
+          "ri": 0.0611,
+          "r": 0.0618,
+          "A": 0.000543621192777177,
+          "I": 1.0382430893433836e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 397369800.5759943,
+        "normal_allowable": 402000000.0,
+        "effective_compression": 392239397.1600878,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 60704035.15987695,
+          "bending": 331535362.0002109,
+          "peak_shear": 12389367.223467931,
+          "hoop_lower": 14402142.857142854
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 1755.9191831059647,
+          "total_shear": 3367.561293888055,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5507.428775514815
+        },
+        "pcr": 326539.28090562567,
+        "brazier_moment": 9080.664556370328,
+        "strength_state": {
+          "utilisation": 0.9945499723376199,
+          "index": 0.9891296474767605,
+          "theta_deg": 180.0,
+          "axial": -392239397.1600878,
+          "hoop": 14732142.857142854,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Titanium Ti-6Al-4V",
+        "case": "transfer",
+        "diameter_mm": 101.0,
+        "nominal_t_mm": 1.25,
+        "shell_mass": 2.6029616843933066,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9854612818076754,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.9793910337132781,
+          "Euler": 0.135668069441354,
+          "local_shell": 0.9854612818076754,
+          "ovalisation": 0.6272431875197045
+        },
+        "margins": {
+          "strength": 0.021042633205028194,
+          "Euler": 6.37093115659227,
+          "local_shell": 0.014753210969035369,
+          "ovalisation": 0.5942779768629778
+        },
+        "section": {
+          "ro": 0.0505,
+          "ri": 0.04925,
+          "r": 0.049875,
+          "A": 0.00039171733399447805,
+          "I": 4.872780017390995e-07
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 692801049.8775365,
+        "normal_allowable": 704000000.0,
+        "effective_compression": 682728610.6500205,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 84244421.00503317,
+          "bending": 598484189.6449873,
+          "peak_shear": 20666448.607643094,
+          "hoop_lower": 13002000.0
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2436.0609650778256,
+          "total_shear": 4047.7030758599158,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5774.815445597102
+        },
+        "pcr": 243240.72816754493,
+        "brazier_moment": 9206.661085363623,
+        "strength_state": {
+          "utilisation": 0.9793910337132781,
+          "index": 0.9592067969179633,
+          "theta_deg": 180.0,
+          "axial": -682728610.6500205,
+          "hoop": 13332000.0,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Steel 4130",
+        "case": "transfer",
+        "diameter_mm": 192.0,
+        "nominal_t_mm": 0.67,
+        "shell_mass": 4.742077667133665,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9947435658121757,
+        "governing": "strength",
+        "utilisations": {
+          "strength": 0.9947435658121757,
+          "Euler": 0.01991377624780599,
+          "local_shell": 0.9817238180799697,
+          "ovalisation": 0.5458814326261411
+        },
+        "margins": {
+          "strength": 0.005284210291455871,
+          "Euler": 49.21649272122235,
+          "local_shell": 0.01861641898000843,
+          "ovalisation": 0.8318996401639329
+        },
+        "section": {
+          "ro": 0.096,
+          "ri": 0.09533,
+          "r": 0.095665,
+          "A": 0.00040272421801559785,
+          "I": 1.8428467814898577e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 346458261.9579901,
+        "normal_allowable": 368000000.0,
+        "effective_compression": 340126327.73474836,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 81941930.78977406,
+          "bending": 258184396.94497433,
+          "peak_shear": 9603037.962315517,
+          "hoop_lower": 46953582.08955223
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 322.0458661917023,
+          "total_shear": 1933.6879769737925,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 4956.190468134852
+        },
+        "pcr": 1657144.2598003377,
+        "brazier_moment": 9079.24353516015,
+        "strength_state": {
+          "utilisation": 0.9947435658121757,
+          "index": 0.9895147617247223,
+          "theta_deg": 180.0,
+          "axial": -340126327.73474836,
+          "hoop": 47283582.08955224,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Magnesium AZ31B",
+        "case": "transfer",
+        "diameter_mm": 194.0,
+        "nominal_t_mm": 1.42,
+        "shell_mass": 2.2809403336621052,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.993731165624274,
+        "governing": "strength",
+        "utilisations": {
+          "strength": 0.993731165624274,
+          "Euler": 0.041973850365926754,
+          "local_shell": 0.993447705391966,
+          "ovalisation": 0.5536231977295076
+        },
+        "margins": {
+          "strength": 0.006308380568690097,
+          "Euler": 22.82435710048114,
+          "local_shell": 0.006595510334838073,
+          "ovalisation": 0.8062826920930175
+        },
+        "section": {
+          "ro": 0.097,
+          "ri": 0.09558,
+          "r": 0.09629,
+          "A": 0.0008591112367842206,
+          "I": 3.982954900548498e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 163604585.86350092,
+        "normal_allowable": 176000000.0,
+        "effective_compression": 162532600.41769788,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 38411789.51811158,
+          "bending": 124120810.8995863,
+          "peak_shear": 5362133.820083784,
+          "hoop_lower": 22212253.521126762
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 691.6925982052402,
+          "total_shear": 2303.3347089873305,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5096.573113737739
+        },
+        "pcr": 786203.7843158777,
+        "brazier_moment": 9205.851804331096,
+        "strength_state": {
+          "utilisation": 0.993731165624274,
+          "index": 0.9875016295329783,
+          "theta_deg": 180.0,
+          "axial": -162532600.41769788,
+          "hoop": 22542253.521126762,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Carbon/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9910143276733662,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.8631832241636627,
+          "Euler": 0.13777726297631593,
+          "local_shell": 0.9910143276733662,
+          "ovalisation": 0.7690327707042995
+        },
+        "margins": {
+          "strength": 0.1585025890289966,
+          "Euler": 6.258091635714241,
+          "local_shell": 0.009067146736142284,
+          "ovalisation": 0.30033470366181514
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 395757293.95219606,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 338397772.3671268,
+          "peak_shear": 14220502.544444053,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2479.01773956791,
+          "total_shear": 4090.6598503500004,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5791.8209993601
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.8631832241636627,
+          "index": 0.7450852784775759,
+          "theta_deg": 172.814678235649,
+          "axial": -393099780.80657566,
+          "hoop": 13243421.052631577,
+          "shear": 1778687.1762748435,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Glass/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 150.0,
+        "nominal_t_mm": 2.04,
+        "shell_mass": 2.702521905032203,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9995100065909232,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.8949622257684083,
+          "Euler": 0.12179071635451422,
+          "local_shell": 0.9995100065909232,
+          "ovalisation": 0.7472269946677587
+        },
+        "margins": {
+          "strength": 0.11736559511370093,
+          "Euler": 7.210806454977671,
+          "local_shell": 0.0004902336203196356,
+          "ovalisation": 0.33828141533434875
+        },
+        "section": {
+          "ro": 0.075,
+          "ri": 0.07296,
+          "r": 0.07397999999999999,
+          "A": 0.0009482533000112993,
+          "I": 2.5954075915642445e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 198601021.6689355,
+        "normal_allowable": 200000000.0,
+        "effective_compression": 198503708.4772818,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 34800828.00619494,
+          "bending": 163702880.47108686,
+          "peak_shear": 7950375.283245266,
+          "hoop_lower": 11802352.941176469
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2157.8426885506983,
+          "total_shear": 3769.4847993327885,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5665.009316474573
+        },
+        "pcr": 270956.61301426316,
+        "brazier_moment": 7581.376685933864,
+        "strength_state": {
+          "utilisation": 0.8949622257684083,
+          "index": 0.8009573855523435,
+          "theta_deg": 171.71046707164496,
+          "axial": -196793364.39618897,
+          "hoop": 12132352.94117647,
+          "shear": 1146248.7529390813,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Aramid/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 208.0,
+        "nominal_t_mm": 1.44,
+        "shell_mass": 1.962356392661135,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.997196397778308,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.992210066478086,
+          "Euler": 0.04532839278705597,
+          "local_shell": 0.997196397778308,
+          "ovalisation": 0.6838562011800994
+        },
+        "margins": {
+          "strength": 0.007851093014571875,
+          "Euler": 21.06122782022753,
+          "local_shell": 0.0028114845058988536,
+          "ovalisation": 0.462295725730564
+        },
+        "section": {
+          "ro": 0.104,
+          "ri": 0.10256,
+          "r": 0.10328,
+          "A": 0.0009344554250767309,
+          "I": 4.984047338277562e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 142519899.15086627,
+        "normal_allowable": 160000000.0,
+        "effective_compression": 142120330.0449716,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 35314686.088199735,
+          "bending": 106805643.95677185,
+          "peak_shear": 5052755.118841185,
+          "hoop_lower": 23503333.333333336
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 749.1451054105936,
+          "total_shear": 2360.787216192684,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5118.503706497787
+        },
+        "pcr": 728020.5180675085,
+        "brazier_moment": 7484.766092147763,
+        "strength_state": {
+          "utilisation": 0.992210066478086,
+          "index": 0.9844808160204478,
+          "theta_deg": 173.254969415751,
+          "axial": -141381090.5396719,
+          "hoop": 23833333.333333336,
+          "shear": 593452.4831731899,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    ],
+    "refined_minima": [
+      {
+        "material": "Aluminium 7075-T6",
+        "case": "transfer",
+        "diameter_mm": 125.10000000000001,
+        "nominal_t_mm": 1.391,
+        "shell_mass": 2.2786408451863487,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.999769393543271,
+        "governing": "strength",
+        "utilisations": {
+          "strength": 0.999769393543271,
+          "Euler": 0.10144525724474689,
+          "local_shell": 0.9995302776961011,
+          "ovalisation": 0.6141519949049757
+        },
+        "margins": {
+          "strength": 0.00023065964833324237,
+          "Euler": 8.85753328603031,
+          "local_shell": 0.00046994304662950626,
+          "ovalisation": 0.6282614211075295
+        },
+        "section": {
+          "ro": 0.06255000000000001,
+          "ri": 0.061159000000000005,
+          "r": 0.06185450000000001,
+          "A": 0.0005406028102458715,
+          "I": 1.0342982959529195e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 394467408.6855287,
+        "normal_allowable": 402000000.0,
+        "effective_compression": 394282118.5455079,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 61042967.91389462,
+          "bending": 333239150.6316133,
+          "peak_shear": 12485654.704924852,
+          "hoop_lower": 14509324.227174694
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 1763.247899838877,
+          "total_shear": 3374.890010620967,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5510.290737699054
+        },
+        "pcr": 325298.59843900026,
+        "brazier_moment": 8972.193827281519,
+        "strength_state": {
+          "utilisation": 0.999769393543271,
+          "index": 0.9995388402658799,
+          "theta_deg": 180.0,
+          "axial": -394282118.5455079,
+          "hoop": 14839324.227174696,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Titanium Ti-6Al-4V",
+        "case": "transfer",
+        "diameter_mm": 100.2,
+        "nominal_t_mm": 1.248,
+        "shell_mass": 2.578006570132692,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.99999405630053,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.9999771010736341,
+          "Euler": 0.13919933917453867,
+          "local_shell": 0.99999405630053,
+          "ovalisation": 0.6374625031353178
+        },
+        "margins": {
+          "strength": 2.2899450738744775e-05,
+          "Euler": 6.183942150372742,
+          "local_shell": 5.943734797897449e-06,
+          "ovalisation": 0.568719720895841
+        },
+        "section": {
+          "ro": 0.0501,
+          "ri": 0.048852,
+          "r": 0.049476,
+          "A": 0.00038796186157000635,
+          "I": 4.749165202163285e-07
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 697270734.0702949,
+        "normal_allowable": 704000000.0,
+        "effective_compression": 697266589.7026023,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 85059907.34876724,
+          "bending": 612206682.353835,
+          "peak_shear": 21237780.375248965,
+          "hoop_lower": 12917596.153846154
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2508.0822942161676,
+          "total_shear": 4119.724404998258,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5803.3346753825645
+        },
+        "pcr": 237070.09096230048,
+        "brazier_moment": 9103.805552231293,
+        "strength_state": {
+          "utilisation": 0.9999771010736341,
+          "index": 0.9999542026716292,
+          "theta_deg": 180.0,
+          "axial": -697266589.7026023,
+          "hoop": 13247596.153846154,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Steel 4130",
+        "case": "transfer",
+        "diameter_mm": 192.70000000000002,
+        "nominal_t_mm": 0.663,
+        "shell_mass": 4.709873357999827,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.999714012312141,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.9994824438878714,
+          "Euler": 0.01990258660881426,
+          "local_shell": 0.999714012312141,
+          "ovalisation": 0.5554090276547501
+        },
+        "margins": {
+          "strength": 0.0005178241151644336,
+          "Euler": 49.244725454787364,
+          "local_shell": 0.00028606950021403676,
+          "ovalisation": 0.8004748756471669
+        },
+        "section": {
+          "ro": 0.09635,
+          "ri": 0.09568700000000001,
+          "r": 0.0960185,
+          "A": 0.0003999892448407496,
+          "I": 1.843882867432215e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 341576360.4763973,
+        "normal_allowable": 368000000.0,
+        "effective_compression": 341478673.84283733,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 82502218.31124112,
+          "bending": 258976455.53159618,
+          "peak_shear": 9667779.878753686,
+          "hoop_lower": 47627013.57466063
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 321.86187571256005,
+          "total_shear": 1933.5039864946502,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 4956.120907348532
+        },
+        "pcr": 1658075.940007983,
+        "brazier_moment": 8923.37117435067,
+        "strength_state": {
+          "utilisation": 0.9994824438878714,
+          "index": 0.9989651556400722,
+          "theta_deg": 180.0,
+          "axial": -341478673.84283733,
+          "hoop": 47957013.57466063,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Magnesium AZ31B",
+        "case": "transfer",
+        "diameter_mm": 193.60000000000002,
+        "nominal_t_mm": 1.417,
+        "shell_mass": 2.2714292646491403,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.999574003090276,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.9993471069837784,
+          "Euler": 0.04232392617199895,
+          "local_shell": 0.999574003090276,
+          "ovalisation": 0.557367745930773
+        },
+        "margins": {
+          "strength": 0.0006533195640023859,
+          "Euler": 22.627297617336577,
+          "local_shell": 0.00042617846043113694,
+          "ovalisation": 0.7941475933991406
+        },
+        "section": {
+          "ro": 0.09680000000000001,
+          "ri": 0.09538300000000001,
+          "r": 0.09609150000000001,
+          "A": 0.0008555289132388476,
+          "I": 3.950010505416244e-06
+        },
+        "knockdown": 0.4,
+        "critical_axial_stress": 163596192.80605453,
+        "normal_allowable": 176000000.0,
+        "effective_compression": 163526501.33347654,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 38572629.737397335,
+          "bending": 124953871.5960792,
+          "peak_shear": 5398566.103991072,
+          "hoop_lower": 22213401.552575864
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 697.6725852156934,
+          "total_shear": 2309.3146959977835,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5098.854395629599
+        },
+        "pcr": 779700.8213721071,
+        "brazier_moment": 9148.097343011474,
+        "strength_state": {
+          "utilisation": 0.9993471069837784,
+          "index": 0.9986946402368473,
+          "theta_deg": 180.0,
+          "axial": -163526501.33347654,
+          "hoop": 22543401.552575868,
+          "shear": 0.0,
+          "criterion": "von Mises",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Carbon/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 121.60000000000001,
+        "nominal_t_mm": 1.5170000000000001,
+        "shell_mass": 1.3734986105570213,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9997288295785344,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.8715830441241623,
+          "Euler": 0.13942339882686527,
+          "local_shell": 0.9997288295785344,
+          "ovalisation": 0.7764129618655746
+        },
+        "margins": {
+          "strength": 0.14733760224177095,
+          "Euler": 6.17239723327783,
+          "local_shell": 0.0002712439748084883,
+          "ovalisation": 0.28797437590066455
+        },
+        "section": {
+          "ro": 0.06080000000000001,
+          "ri": 0.05928300000000001,
+          "r": 0.06004150000000001,
+          "A": 0.0005722910877320922,
+          "I": 1.0317140814385053e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399875150.8303704,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 399766716.5171861,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57662963.31954825,
+          "bending": 342103753.19763786,
+          "peak_shear": 14413333.941244535,
+          "hoop_lower": 12896104.152933422
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2512.6691687582697,
+          "total_shear": 4124.3112795403595,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5805.15229419352
+        },
+        "pcr": 236689.10869816842,
+        "brazier_moment": 7476.88740312221,
+        "strength_state": {
+          "utilisation": 0.8715830441241623,
+          "index": 0.7596570028047415,
+          "theta_deg": 172.79633256252993,
+          "axial": -397066381.04059005,
+          "hoop": 13226104.152933422,
+          "shear": 1807385.0518292463,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Glass/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 149.4,
+        "nominal_t_mm": 2.045,
+        "shell_mass": 2.698068190863925,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9994329643811626,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.8999999380104782,
+          "Euler": 0.12299523596244817,
+          "local_shell": 0.9994329643811626,
+          "ovalisation": 0.7478680571944503
+        },
+        "margins": {
+          "strength": 0.11111118764139016,
+          "Euler": 7.130396207421491,
+          "local_shell": 0.000567357330652607,
+          "ovalisation": 0.33713425834952315
+        },
+        "section": {
+          "ro": 0.0747,
+          "ri": 0.072655,
+          "r": 0.0736775,
+          "A": 0.0009466905932855876,
+          "I": 2.569990189742484e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 199905189.79690734,
+        "normal_allowable": 200000000.0,
+        "effective_compression": 199791836.43390203,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 34858273.900736764,
+          "bending": 164933562.53316528,
+          "peak_shear": 8013885.077838152,
+          "hoop_lower": 11724278.728606356
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2181.6926986484605,
+          "total_shear": 3793.3348094305506,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5674.399433326817
+        },
+        "pcr": 268303.0748449092,
+        "brazier_moment": 7587.433877860409,
+        "strength_state": {
+          "utilisation": 0.8999999380104782,
+          "index": 0.8099998884188645,
+          "theta_deg": 171.7066498017694,
+          "axial": -198067049.7271077,
+          "hoop": 12054278.728606358,
+          "shear": 1155933.640359808,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      },
+      {
+        "material": "Aramid/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 206.9,
+        "nominal_t_mm": 1.442,
+        "shell_mass": 1.9545981529482426,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9993125863221372,
+        "governing": "strength",
+        "utilisations": {
+          "strength": 0.9993125863221372,
+          "Euler": 0.045997769436445464,
+          "local_shell": 0.9991204144922358,
+          "ovalisation": 0.686207044100582
+        },
+        "margins": {
+          "strength": 0.0006878865404795764,
+          "Euler": 20.740184627467368,
+          "local_shell": 0.0008803598595383821,
+          "ovalisation": 0.45728611881376047
+        },
+        "section": {
+          "ro": 0.10345,
+          "ri": 0.102008,
+          "r": 0.102729,
+          "A": 0.0009307610252134488,
+          "I": 4.9115176276292125e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 143483328.6808734,
+        "normal_allowable": 160000000.0,
+        "effective_compression": 143357122.82435992,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 35454858.02054529,
+          "bending": 107902264.80381463,
+          "peak_shear": 5097531.451807804,
+          "hoop_lower": 23344410.540915396
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 760.6496892891162,
+          "total_shear": 2372.291800071206,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5122.898749589664
+        },
+        "pcr": 717426.0927064231,
+        "brazier_moment": 7465.529235865387,
+        "strength_state": {
+          "utilisation": 0.9993125863221372,
+          "index": 0.9986256451818388,
+          "theta_deg": 173.26426809961444,
+          "axial": -142612348.585035,
+          "hoop": 23674410.540915396,
+          "shear": 597889.9463586744,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    ],
+    "diameter_step_mm": 1,
+    "wall_step_mm": 0.01,
+    "refined_diameter_step_mm": 0.1,
+    "refined_wall_step_mm": 0.001
+  },
+  "sensitivities": [
+    {
+      "case": "primary",
+      "gust_m_s": 20.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "primary",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.5673240432574318,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.5105070836478165,
+          "Euler": 0.13777726297631593,
+          "local_shell": 0.5673240432574318,
+          "ovalisation": 0.38451638535214977
+        },
+        "margins": {
+          "strength": 0.9588366783366125,
+          "Euler": 6.258091635714241,
+          "local_shell": 0.7626610609665894,
+          "ovalisation": 1.6006694073236303
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 226558407.76863265,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 169198886.1835634,
+          "peak_shear": 9911554.921943597,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 1239.508869783955,
+          "total_shear": 2851.1509805660453,
+          "p": 330000.0,
+          "first_order_M": 2417.4631661731355,
+          "M": 2895.91049968005
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.5105070836478165,
+          "index": 0.2606174824545987,
+          "theta_deg": 170.03273481970137,
+          "axial": -224004655.6061893,
+          "hoop": 13243421.052631577,
+          "shear": 1715546.427201575,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    },
+    {
+      "case": "primary",
+      "gust_m_s": 22.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "primary",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.6093700349835254,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.5460241609435122,
+          "Euler": 0.13777726297631593,
+          "local_shell": 0.6093700349835254,
+          "ovalisation": 0.4226748547618293
+        },
+        "margins": {
+          "strength": 0.8314207896442385,
+          "Euler": 6.258091635714241,
+          "local_shell": 0.6410390117509397,
+          "ovalisation": 1.3658847663495015
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 243349293.0690717,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 185989771.48400247,
+          "peak_shear": 10895153.488087848,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1771.5775479346803,
+          "secondary_shear": 1362.5147106075162,
+          "total_shear": 3134.0922585421968,
+          "p": 330000.0,
+          "first_order_M": 2657.3663219020204,
+          "M": 3183.293603299963
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.5460241609435122,
+          "index": 0.2981423843340666,
+          "theta_deg": 170.03273481970132,
+          "axial": -240542112.7629063,
+          "hoop": 13243421.052631577,
+          "shear": 1885793.0756072255,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 22.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    },
+    {
+      "case": "primary",
+      "gust_m_s": 24.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "primary",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.6513247365707925,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.5814641236610063,
+          "Euler": 0.13777726297631593,
+          "local_shell": 0.6513247365707925,
+          "ovalisation": 0.46075047461018803
+        },
+        "margins": {
+          "strength": 0.7197965606266712,
+          "Euler": 6.258091635714241,
+          "local_shell": 0.535332444557493,
+          "ovalisation": 1.1703721539213543
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 260103722.04663268,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 202744200.46156344,
+          "peak_shear": 11876616.46779528,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1931.165733716533,
+          "secondary_shear": 1485.2534814958885,
+          "total_shear": 3416.4192152124215,
+          "p": 330000.0,
+          "first_order_M": 2896.748600574799,
+          "M": 3470.0527415346205
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.5814641236610063,
+          "index": 0.33810052710486205,
+          "theta_deg": 170.03273481970132,
+          "axial": -257043663.83921722,
+          "hoop": 13243421.052631577,
+          "shear": 2055670.0849692977,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 24.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    },
+    {
+      "case": "transfer",
+      "gust_m_s": 20.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": true,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 0.9910143276733662,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.8631832241636627,
+          "Euler": 0.13777726297631593,
+          "local_shell": 0.9910143276733662,
+          "ovalisation": 0.7690327707042995
+        },
+        "margins": {
+          "strength": 0.1585025890289966,
+          "Euler": 6.258091635714241,
+          "local_shell": 0.009067146736142284,
+          "ovalisation": 0.30033470366181514
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 395757293.95219606,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 338397772.3671268,
+          "peak_shear": 14220502.544444053,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1611.6421107820902,
+          "secondary_shear": 2479.01773956791,
+          "total_shear": 4090.6598503500004,
+          "p": 330000.0,
+          "first_order_M": 4834.926332346271,
+          "M": 5791.8209993601
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.8631832241636627,
+          "index": 0.7450852784775759,
+          "theta_deg": 172.814678235649,
+          "axial": -393099780.80657566,
+          "hoop": 13243421.052631577,
+          "shear": 1778687.1762748435,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 20.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    },
+    {
+      "case": "transfer",
+      "gust_m_s": 22.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": false,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 1.0751063111255534,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 0.9336990225335541,
+          "Euler": 0.13777726297631593,
+          "local_shell": 1.0751063111255534,
+          "ovalisation": 0.8453497095236586
+        },
+        "margins": {
+          "strength": 0.07100893956870702,
+          "Euler": 6.258091635714241,
+          "local_shell": -0.06985942724763927,
+          "ovalisation": 0.18294238317475076
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 429339064.5530742,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 371979542.96800494,
+          "peak_shear": 15631710.57615246,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1771.5775479346803,
+          "secondary_shear": 2725.0294212150325,
+          "total_shear": 4496.606969149712,
+          "p": 330000.0,
+          "first_order_M": 5314.732643804041,
+          "M": 6366.587206599926
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 0.9336990225335541,
+          "index": 0.8717938646801143,
+          "theta_deg": 172.81467823564896,
+          "axial": -426417826.2765205,
+          "hoop": 13243421.052631577,
+          "shear": 1955199.7588091858,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 22.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    },
+    {
+      "case": "transfer",
+      "gust_m_s": 24.0,
+      "result": {
+        "material": "Carbon/Epoxy QI",
+        "case": "transfer",
+        "diameter_mm": 122.0,
+        "nominal_t_mm": 1.52,
+        "shell_mass": 1.3807646544356094,
+        "passes": false,
+        "applicability": {
+          "thin_shell": true,
+          "elastic_capacity": true
+        },
+        "utilisation": 1.1590157143000877,
+        "governing": "local_shell",
+        "utilisations": {
+          "strength": 1.00406171720061,
+          "Euler": 0.13777726297631593,
+          "local_shell": 1.1590157143000877,
+          "ovalisation": 0.9215009492203761
+        },
+        "margins": {
+          "strength": -0.004045286391293201,
+          "Euler": 6.258091635714241,
+          "local_shell": -0.13719892865828387,
+          "ovalisation": 0.08518607696067715
+        },
+        "section": {
+          "ro": 0.061,
+          "ri": 0.05948,
+          "r": 0.06024,
+          "A": 0.0005753186060148373,
+          "I": 1.0440407999425916e-06
+        },
+        "knockdown": 0.5,
+        "critical_axial_stress": 399345683.4083592,
+        "normal_allowable": 400000000.0,
+        "effective_compression": 462847922.5081961,
+        "critical_angle_deg": 180.0,
+        "compression_terms": {
+          "axial": 57359521.58506923,
+          "bending": 405488400.9231269,
+          "peak_shear": 17039854.596956655,
+          "hoop_lower": 12913421.052631577
+        },
+        "applied": {
+          "P": 33000.0,
+          "V": 1931.165733716533,
+          "secondary_shear": 2970.506962991777,
+          "total_shear": 4901.6726967083105,
+          "p": 330000.0,
+          "first_order_M": 5793.497201149598,
+          "M": 6940.105483069241
+        },
+        "pcr": 239517.02397856995,
+        "brazier_moment": 7531.305842865195,
+        "strength_state": {
+          "utilisation": 1.00406171720061,
+          "index": 1.008139931947838,
+          "theta_deg": 172.81467823564896,
+          "axial": -459663531.6999707,
+          "hoop": 13243421.052631577,
+          "shear": 2131329.09772141,
+          "criterion": "PSD quadratic envelope",
+          "case": "wall_only"
+        },
+        "pressure_path": "wall_only",
+        "basis": {
+          "length": 1.5,
+          "load_factor": 1.1,
+          "gust_velocity": 24.0
+        },
+        "mass_scope": "uniform shell",
+        "analysis_scope": "prescribed course model; local Donnell energy bound and global beam-column checks"
+      }
+    }
+  ],
+  "thresholds": {
+    "maximum_gust_m_s": 20.21351485555035,
+    "minimum_actual_wall_mm": 1.513594444526912,
+    "maximum_wall_loss_mm": 0.006405555473087965
+  },
+  "closed_end_strength": {
+    "primary": {
+      "utilisation": 0.497225309974964,
+      "index": 0.24723300887969904,
+      "theta_deg": 170.03273481970137,
+      "axial": -217629404.24322012,
+      "hoop": 13243421.052631577,
+      "shear": 1715546.427201575,
+      "criterion": "PSD quadratic envelope",
+      "case": "closed_end"
+    },
+    "transfer": {
+      "utilisation": 0.8499014504908103,
+      "index": 0.7223324755463834,
+      "theta_deg": 172.814678235649,
+      "axial": -386724529.4436065,
+      "hoop": 13243421.052631577,
+      "shear": 1778687.1762748435,
+      "criterion": "PSD quadratic envelope",
+      "case": "closed_end"
+    }
+  },
+  "scope": "Homogeneous shell with ideal rigid simply supported end rings; effective-QI scalar properties; no FEA.",
+  "excluded_inputs": [
+    "Ring and connection geometry and mass",
+    "Manufacturing tolerances and material stress-strain curves",
+    "Ply-level laminate architecture"
+  ]
+}

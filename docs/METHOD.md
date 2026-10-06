@@ -1,6 +1,6 @@
 # Analytical Method Specification
 
-Document DRA-MTH-C | Revision C | 6 October 2026
+Governing equations, admissible domain and numerical procedure.
 
 ## 1. Scope, coordinates and units
 
@@ -27,7 +27,7 @@ m_shell = rho_material A L
 
 Inputs are rho_air = 1.225 kg/m3, U = 200 m/s, w_g = 20 m/s, C_Nalpha = 2 rad^-1, D_u = 0.10 m and L_u = 3 m. Case A applies the assignment's stated moment at the barrel. Case B includes the additional moment V L when the upper interface shear is transferred through the barrel without an intermediate lateral reaction. The recommended design is checked under both cases; their results are not mixed.
 
-The factor 1.1 is a declared design requirement, not a statistically derived material factor. Strength allowables are not divided by 1.1 a second time. Pressure-end thrust is not subtracted from compression in the baseline; a separate closed-end strength check is provided.
+The factor 1.1 is a declared design requirement, not a statistically derived material factor. Strength allowables are not divided by 1.1 a second time. Pressure-end thrust is not subtracted from compression in the design load case; a separate closed-end strength check is provided.
 
 ## 3. Beam-column moment and shear envelope
 
@@ -81,7 +81,7 @@ M_Brazier = 0.987 E r t^2/sqrt(1-nu^2)
 U_ovalisation = M_max/M_Brazier
 ```
 
-The notice prescribes k = 0.40 for B-basis metals and 0.50 for B-basis QI composites. For the matched clean-material comparison use k = 0.50 and 0.65 respectively. No geometry-dependent NASA correlation is multiplied into these prescribed factors. The local axial classical relation is the lower continuous-wavenumber envelope used by the course shell model; a factor calibrated for one material population is not represented as experimental validation of this design.
+The notice prescribes k = 0.40 for B-basis metals and 0.50 for B-basis QI composites. No geometry-dependent NASA correlation is multiplied into these prescribed factors. The local axial classical relation is the lower continuous-wavenumber envelope used by the course shell model; a factor calibrated for one material population is not represented as experimental validation of this design.
 
 An elastic buckling capacity must not exceed the metal yield allowable, or the smaller QI normal allowable. A candidate outside this domain is rejected; it is not accepted by clipping a predicted elastic capacity to a strength value. This eliminates yield-capped candidates from the design search. It does not substitute for proportional-limit or tangent-modulus data in a physical elastic-plastic analysis. Ideal unpressurised Brazier capacity is checked without pressure-stabilisation credit.
 
@@ -106,11 +106,11 @@ U_QI = |sigma_x|/X_sign + sigma_h/Y_t + |tau|/S
 X_sign = X_c in axial compression, Y_t in axial tension.
 ```
 
-Requiring U_QI <= 1 bounds every convex quadratic interaction having these normalised uniaxial limits. This replaces the special choice Q = identity. The sign-dependent criterion is maximised analytically on each axial-stress sign interval: it has the form A+B c+C sqrt(1-c^2). The QI equivalence treats in-plane tensile strength as direction-independent. No laminate stacking sequence, interlaminar strength or manufacturing qualification follows from this homogeneous model.
+Requiring U_QI <= 1 bounds every convex quadratic interaction having these normalised uniaxial limits. The sign-dependent criterion is maximised analytically on each axial-stress sign interval: it has the form A+B c+C sqrt(1-c^2). The QI equivalence treats in-plane tensile strength as direction-independent. No laminate stacking sequence, interlaminar strength or manufacturing qualification follows from this homogeneous model.
 
 ## 7. Optimisation and numerical resolution
 
-The nominal search enumerates D = 1, 2, ..., 300 mm and walls at 0.01 mm increments. Each material is searched independently. Admissible upper wall is the smaller of D/21 and eta D/(2+eta), where eta = sigma_allow sqrt[3(1-nu^2)]/(k E). The latter enforces the elastic-capacity gate. Integer bisection locates the first feasible thickness within this domain; exhaustive sequential-search tests independently verify the search on representative diameters for every material and both load cases. All nominal sweep minima are checked against the saved CSV files.
+The nominal search enumerates D = 1, 2, ..., 300 mm and walls at 0.01 mm increments. Each material is searched independently. Admissible upper wall is the smaller of D/21 and eta D/(2+eta), where eta = sigma_allow sqrt[3(1-nu^2)]/(k E). The latter enforces the elastic-capacity gate. Integer bisection locates the first feasible thickness within this domain; exhaustive sequential-search tests independently verify the search on representative diameters for every material and both load cases. The transfer-load sweep governs selection; the selected geometry is checked under both load cases. Nominal sweep minima are checked against the saved CSV file.
 
 A complete second search at 0.1 mm diameter and 0.001 mm wall spacing quantifies discretisation effects. The nominal-grid solution, not the finer result, is used for the reported design dimensions. Neither grid defines stock availability or a wall-thickness tolerance. Acceptance requires every utilisation <= 1 and every applicability gate true.
 
@@ -122,10 +122,9 @@ The minimum is over the specified homogeneous, unstiffened shell family and disc
 
 ```
 m_assembly = m_shell + m_end_rings + m_connections + m_other_interfaces
-Delta m_assembly = Delta m_shell + Delta m_interfaces
 ```
 
-The briefs prescribe ideal rigid end boundaries but no ring cross-sections, attachment geometry or interface mass budget. Reported masses and score calculations therefore use shell mass. Interface contributions cannot be assigned numerical values from the supplied information. This is an explicit system-boundary exclusion, not a computational result equal to zero.
+The briefs prescribe ideal rigid end boundaries but no ring cross-sections, attachment geometry or interface mass budget. Reported masses therefore use shell mass. Interface contributions cannot be assigned numerical values from the supplied information. This is an explicit system-boundary exclusion, not a computational result equal to zero.
 
 ## 9. Sources and equation provenance
 
@@ -133,5 +132,3 @@ The briefs prescribe ideal rigid end boundaries but no ring cross-sections, atta
 2. Guild Assay Office, *Tweak to Drakkar Ascent*, 3 October 2026, sections 2-5: revised material properties, prescribed knockdowns and response requirements.
 3. NASA/SP-8007-2020/REV 2, *Buckling of Thin-Walled Circular Cylinders*, equations 7 and 16 and section 4.1.1: reference axial-shell and ovalisation expressions; printed page 25 identifies long-cylinder/global-local and plasticity limitations. https://ntrs.nasa.gov/citations/20205011530
 4. The pressure-supported completion-of-square bound and PSD composite interaction bound are derived in sections 4 and 6 of this document. They are not represented as empirical correlations from source 3.
-
-The previously used NASA torsional capacity is not a transverse-shear formula and is absent from Revision C acceptance calculations. The online Air Force interaction-table transcription is not used as a normative equation source.

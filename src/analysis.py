@@ -1,27 +1,77 @@
-"""Revision C analytical sizing: pressure-supported transverse-shear bound.
-
-SI units. The source equations, derivation, validity domain and design-space
-boundary are specified in docs/METHOD.md. No finite elements are used.
-"""
-from dataclasses import asdict, replace
+"""Analytical sizing of the Drakkar shell. SI units; see docs/METHOD.md."""
+from dataclasses import dataclass
 import math
-from parametric_diameter_study import Material, MATERIALS, flight_loads, section, strength_envelope, quadratic_maximum
 
-B_MATERIALS = (
-    replace(MATERIALS[0], yield_stress=402e6),
-    replace(MATERIALS[1], yield_stress=704e6),
-    replace(MATERIALS[2], yield_stress=368e6),
-    replace(MATERIALS[3], yield_stress=176e6),
-    replace(MATERIALS[4], E=52.3e9, Xc=480e6, Yt=400e6, S=160e6),
-    replace(MATERIALS[5], E=23.8e9, Xc=240e6, Yt=200e6, S=80e6),
-    replace(MATERIALS[6], E=33.3e9, Xc=160e6, Yt=240e6, S=64e6),
+@dataclass(frozen=True)
+class Material:
+    name: str
+    E: float
+    nu: float
+    density: float
+    yield_stress: float = 0.0
+    Xc: float = 0.0
+    Yt: float = 0.0
+    S: float = 0.0
+
+    @property
+    def composite(self):
+        return self.yield_stress == 0
+
+MATERIALS = (
+    Material('Aluminium 7075-T6', 71.7e9, .33, 2810, 402e6),
+    Material('Titanium Ti-6Al-4V', 113.8e9, .31, 4430, 704e6),
+    Material('Steel 4130', 205e9, .29, 7850, 368e6),
+    Material('Magnesium AZ31B', 45e9, .35, 1770, 176e6),
+    Material('Carbon/Epoxy QI', 52.3e9, .30, 1600, Xc=480e6, Yt=400e6, S=160e6),
+    Material('Glass/Epoxy QI', 23.8e9, .30, 1900, Xc=240e6, Yt=200e6, S=80e6),
+    Material('Aramid/Epoxy QI', 33.3e9, .34, 1400, Xc=160e6, Yt=240e6, S=64e6),
 )
 LENGTH = 1.5
 FACTOR = 1.1
 
+def flight_loads(gust_velocity=20.0):
+    q = .5 * 1.225 * 200**2
+    alpha = math.atan(gust_velocity / 200)
+    f = q * 2 * alpha * .1
+    return dict(q=q, alpha=alpha, f=f, F=30000., p=300000., V=f*3, M=f*3**2/2)
 
-def knockdown(material, quality='B'):
-    return (.50 if material.composite else .40) if quality == 'B' else (.65 if material.composite else .50)
+LOADS = flight_loads()
+
+def section(diameter, thickness):
+    ro = diameter/2
+    ri = ro-thickness
+    return dict(ro=ro, ri=ri, r=(ro+ri)/2,
+                A=math.pi*(ro**2-ri**2), I=math.pi/4*(ro**4-ri**4))
+
+def quadratic_maximum(fn, left, right):
+    """Exact maximum of a quadratic on an interval, from three values."""
+    mid = (left+right)/2
+    yl, ym, yr = fn(left), fn(mid), fn(right)
+    # map interval to z in [-1,1]
+    a = (yl+yr)/2-ym
+    b = (yr-yl)/2
+    choices = [(yl, left), (yr, right)]
+    if a < 0:
+        z = -b/(2*a)
+        if -1 < z < 1:
+            c = mid+z*(right-left)/2
+            choices.append((fn(c), c))
+    return max(choices)
+
+def metal_strength(material,s,t,P,M,p,V,pressure_path):
+    """Exact circumferential von Mises maximum."""
+    relief=p*math.pi*s['ri']**2/s['A'] if pressure_path=='closed_end' else 0.
+    a=-P/s['A']+relief; b=M*s['ro']/s['I']; h=p*s['ro']/t
+    tau=V/(math.pi*s['r']*t)
+    def index(c):
+        x=a+b*c
+        return (x*x+h*h-x*h+3*tau*tau*(1-c*c))/material.yield_stress**2
+    value,c=quadratic_maximum(index,-1.,1.)
+    return dict(utilisation=math.sqrt(value),index=value,theta_deg=math.degrees(math.acos(c)),
+        axial=a+b*c,hoop=h,shear=tau*math.sqrt(max(0.,1-c*c)),criterion='von Mises',case=pressure_path)
+
+def knockdown(material):
+    return .50 if material.composite else .40
 
 
 def beam_envelope(P, moment, E, I, length=LENGTH):
@@ -72,12 +122,12 @@ def composite_envelope(material,s,t,P,M,p,V,pressure_path):
         criterion='PSD quadratic envelope',case=pressure_path)
 
 
-def evaluate(material, diameter_mm, wall_mm, case='primary', quality='B', gust=20., pressure_path='wall_only'):
+def evaluate(material, diameter_mm, wall_mm, case='primary', gust=20., pressure_path='wall_only'):
     D=diameter_mm/1000; t=wall_mm/1000
     if D <= 0 or t <= 0 or 2*t >= D:
         raise ValueError('Require D>0 and 0<t<D/2')
-    if case not in ('primary','transfer') or quality not in ('A','B') or pressure_path not in ('wall_only','closed_end'):
-        raise ValueError('Invalid analysis case, material quality or pressure load path')
+    if case not in ('primary','transfer') or pressure_path not in ('wall_only','closed_end'):
+        raise ValueError('Invalid analysis case, pressure load path')
     s=section(D,t); loads=flight_loads(gust)
     P=FACTOR*loads['F']; p=FACTOR*loads['p']; V=FACTOR*loads['V']
     first=FACTOR*(loads['M']+(loads['V']*LENGTH if case=='transfer' else 0))
@@ -92,19 +142,19 @@ def evaluate(material, diameter_mm, wall_mm, case='primary', quality='B', gust=2
     hoop=p*s['ri']/t  # inner-radius value is a lower membrane-tension bound
     axial=P/s['A']; bending=moment*s['ro']/s['I']; shear=total_shear/(math.pi*s['r']*t)
     effective,cosine=compression_bound(axial,bending,shear,hoop)
-    k=knockdown(material,quality)
+    k=knockdown(material)
     critical=k*material.E*t/(s['r']*math.sqrt(3*(1-material.nu**2)))
     normal_limit=min(material.Xc,material.Yt) if material.composite else material.yield_stress
     elastic_capacity=critical <= normal_limit
     if material.composite:
         strength=composite_envelope(material,s,t,P,moment,p,total_shear,pressure_path)
     else:
-        strength,_=strength_envelope(material,s,t,P,moment,p,total_shear,pressure_path)
+        strength=metal_strength(material,s,t,P,moment,p,total_shear,pressure_path)
     brazier=.987*material.E*s['r']*t*t/math.sqrt(1-material.nu**2)
     utils=dict(strength=strength['utilisation'],Euler=P/pcr,local_shell=effective/critical,ovalisation=moment/brazier)
     governing=max(utils,key=utils.get)
     valid=10 <= s['r']/t < 1500 and elastic_capacity
-    return dict(material=material.name,quality=quality,case=case,diameter_mm=diameter_mm,nominal_t_mm=wall_mm,
+    return dict(material=material.name,case=case,diameter_mm=diameter_mm,nominal_t_mm=wall_mm,
         shell_mass=s['A']*LENGTH*material.density,passes=valid and max(utils.values())<=1,
         applicability=dict(thin_shell=10 <= s['r']/t < 1500,elastic_capacity=elastic_capacity),
         utilisation=utils[governing],governing=governing,utilisations=utils,
@@ -118,36 +168,36 @@ def evaluate(material, diameter_mm, wall_mm, case='primary', quality='B', gust=2
         analysis_scope='prescribed course model; local Donnell energy bound and global beam-column checks')
 
 
-def maximum_wall(material,D,quality):
+def maximum_wall(material,D):
     """Thin-shell and elastic-capacity domain upper bound, in mm."""
     allowable=min(material.Xc,material.Yt) if material.composite else material.yield_stress
-    ratio=allowable*math.sqrt(3*(1-material.nu**2))/(knockdown(material,quality)*material.E)
+    ratio=allowable*math.sqrt(3*(1-material.nu**2))/(knockdown(material)*material.E)
     return min(D/21,ratio*D/(2+ratio))
 
 
-def minimum_wall(material,D,case='primary',quality='B',step=.01):
+def minimum_wall(material,D,case='primary',step=.01):
     # All utilisations decrease with increasing wall over the admitted domain.
     # Independent exhaustive-grid comparisons verify the integer bisection.
-    upper=math.floor(maximum_wall(material,D,quality)/step+1e-10)
-    if upper < 1 or not evaluate(material,D,upper*step,case,quality)['passes']:
+    upper=math.floor(maximum_wall(material,D)/step+1e-10)
+    if upper < 1 or not evaluate(material,D,upper*step,case)['passes']:
         return None
     lo,hi=1,upper
     while lo < hi:
         mid=(lo+hi)//2
-        if evaluate(material,D,mid*step,case,quality)['passes']:hi=mid
+        if evaluate(material,D,mid*step,case)['passes']:hi=mid
         else:lo=mid+1
-    return evaluate(material,D,lo*step,case,quality)
+    return evaluate(material,D,lo*step,case)
 
 
-def optimise(materials,case='primary',quality='B',diameter_step=1.,wall_step=.01):
+def optimise(materials,case='primary',diameter_step=1.,wall_step=.01):
     rows=[]; winners=[]
     for material in materials:
         candidates=[]
         for i in range(1,round(300/diameter_step)+1):
             D=i*diameter_step
-            row=minimum_wall(material,D,case,quality,wall_step)
+            row=minimum_wall(material,D,case,wall_step)
             if row is not None:candidates.append(row);rows.append(row)
         if not candidates:
-            raise RuntimeError(f'No feasible design for {material.name}: {case}, {quality}')
+            raise RuntimeError(f'No feasible design for {material.name}: {case}')
         winners.append(min(candidates,key=lambda row:row['shell_mass']))
     return winners,rows

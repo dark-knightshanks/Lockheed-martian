@@ -1,6 +1,6 @@
 # Design Basis and System Boundary
 
-DRA-BAS-C | Revision C | 6 October 2026
+Geometry, loads, material law and system boundary.
 
 ## Normative inputs
 
@@ -40,7 +40,7 @@ The objective is shell mass within the defined family. Rigid end rings specify k
 m_assembly = m_shell + m_end_rings + m_connections + m_other_interfaces
 ```
 
-The missing interface terms are excluded from the numerical objective and score calculation. They are not assumed to be physically zero. Stiffened, sandwich and hybrid configurations would add design variables and failure constraints; their global optimum is not established by the current homogeneous-shell search.
+The missing interface terms are excluded from the numerical objective. They are not assumed to be physically zero. Stiffened, sandwich and hybrid configurations would add design variables and failure constraints; their global optimum is not established by the current homogeneous-shell search.
 
 ## Acceptance versus production release
 
